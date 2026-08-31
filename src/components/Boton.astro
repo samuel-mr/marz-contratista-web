@@ -1,0 +1,120 @@
+---
+/**
+ * Botón-enlace. Todas las acciones del sitio son enlaces nativos
+ * (tel: / wa.me), así que nunca renderiza <button>.
+ *
+ * Variantes:
+ *   solid        amarillo sólido sobre fondo oscuro
+ *   outline      contorno amarillo sobre fondo oscuro
+ *   dark         oscuro sólido sobre la banda amarilla
+ *   darkOutline  contorno oscuro sobre la banda amarilla
+ */
+interface Props {
+  href: string;
+  variante?: 'solid' | 'outline' | 'dark' | 'darkOutline';
+  /** Abre en pestaña nueva con rel de seguridad. Para los enlaces de WhatsApp. */
+  externo?: boolean;
+  /** Nombre accesible cuando el texto visible no basta. */
+  label?: string;
+  /** Padding ancho del CTA final (12px 22px en vez de 12px 20px). */
+  ancho?: boolean;
+  /** `sm` son las métricas del botón del header: 13px, uppercase. */
+  tam?: 'md' | 'sm';
+  /** Nombre del evento de Umami. Sin Umami configurado, es un atributo inerte. */
+  evento?: string;
+}
+const {
+  href,
+  variante = 'solid',
+  externo = false,
+  label,
+  ancho = false,
+  tam = 'md',
+  evento,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['boton', variante, tam, { ancho }]}
+  target={externo ? '_blank' : undefined}
+  rel={externo ? 'noopener' : undefined}
+  aria-label={label}
+  data-umami-event={evento}
+>
+  <slot />
+</a>
+
+<style>
+  /* gap en vez de margin-right en el icono: Astro 7 usa compressHTML:'jsx',
+     que elimina el espacio en blanco entre elementos inline, así que el
+     espaciado no puede depender del whitespace del markup. */
+  .boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--e-8);
+    min-height: var(--target-tactil);
+    padding: var(--e-12) var(--e-20);
+    font-family: var(--f-cuerpo);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 0;
+    transition:
+      background-color 0.12s ease,
+      color 0.12s ease;
+  }
+
+  .boton.ancho {
+    padding: var(--e-12) 22px;
+  }
+
+  .boton.sm {
+    padding: var(--e-10) var(--e-16);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .solid {
+    background: var(--c-acento);
+    color: var(--c-bg);
+  }
+  .solid:hover {
+    background: var(--c-acento-hover);
+    color: var(--c-bg);
+  }
+
+  .outline {
+    border: var(--b-outline) solid var(--c-acento);
+    color: var(--c-acento);
+  }
+  .outline:hover {
+    background: rgba(244, 196, 48, 0.12);
+    color: var(--c-acento);
+  }
+
+  .dark {
+    background: var(--c-bg);
+    color: var(--c-acento);
+  }
+  .dark:hover {
+    background: var(--c-borde-hover);
+    color: var(--c-acento);
+  }
+
+  .darkOutline {
+    border: var(--b-outline) solid var(--c-bg);
+    color: var(--c-bg);
+  }
+  .darkOutline:hover {
+    background: rgba(20, 21, 26, 0.08);
+    color: var(--c-bg);
+  }
+
+  /* Sobre la banda amarilla el foco amarillo sería invisible. */
+  .dark:focus-visible,
+  .darkOutline:focus-visible {
+    outline-color: var(--c-bg);
+  }
+</style>

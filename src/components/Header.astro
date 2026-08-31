@@ -1,0 +1,49 @@
+---
+import Logo from './Logo.astro';
+import Boton from './Boton.astro';
+import { empresa, telHref } from '../data/sitio';
+import { inicio } from '../lib/rutas';
+---
+
+<header class="header">
+  <a class="marca" href={inicio} aria-label={`${empresa.nombre}, inicio`}>
+    <Logo size={26} />
+    <span class="wordmark">{empresa.nombre}</span>
+  </a>
+  <Boton href={telHref} variante="solid" tam="sm" evento="llamar-header">Llamar ahora</Boton>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e-12);
+    flex-wrap: wrap;
+    padding: var(--e-14) var(--e-20);
+    background: var(--c-bg);
+    border-bottom: var(--b-hairline);
+  }
+
+  .marca {
+    display: flex;
+    align-items: center;
+    gap: var(--e-10);
+    color: var(--c-acento);
+  }
+  .marca:hover {
+    color: var(--c-acento);
+  }
+
+  .wordmark {
+    font-family: var(--f-titulo);
+    font-size: 22px;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    color: var(--c-texto);
+    text-transform: uppercase;
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+import Seccion from './Seccion.astro';
+import Rejilla from './Rejilla.astro';
+import Tarjeta from './Tarjeta.astro';
+import { testimonios } from '../data/sitio';
+---
+
+<Seccion titulo="Lo que dicen nuestros clientes" id="testimonios">
+  <Rejilla min="240px">
+    {
+      testimonios.map((t) => (
+        <Tarjeta>
+          <blockquote class="cita">{t.cita}</blockquote>
+          <p class="autor">{t.autor}</p>
+        </Tarjeta>
+      ))
+    }
+  </Rejilla>
+</Seccion>
+
+<style>
+  .cita {
+    font-style: italic;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .autor {
+    font-size: 12px;
+    opacity: 0.6;
+    margin: var(--e-10) 0 0;
+  }
+</style>

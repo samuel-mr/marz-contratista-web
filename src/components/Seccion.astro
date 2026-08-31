@@ -1,0 +1,44 @@
+---
+/**
+ * Contenedor estándar de sección: ancho máximo, padding y H2 con regla.
+ * Todas las secciones de contenido pasan por aquí, así que el ritmo
+ * vertical del sitio se ajusta en un solo sitio.
+ */
+interface Props {
+  titulo?: string;
+  /** Color de la regla bajo el H2. Servicios usa acento; el resto, borde. */
+  regla?: 'acento' | 'borde';
+  id?: string;
+}
+const { titulo, regla = 'borde', id } = Astro.props;
+---
+
+<section id={id} class="seccion">
+  {
+    titulo && (
+      <h2 class:list={['titulo', regla]}>{titulo}</h2>
+    )
+  }
+  <slot />
+</section>
+
+<style>
+  .seccion {
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: var(--pad-seccion);
+  }
+
+  .titulo {
+    display: inline-block;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    padding-bottom: var(--e-8);
+    margin: 0 0 var(--e-22);
+    border-bottom: var(--b-regla) solid var(--c-borde);
+  }
+
+  .titulo.acento {
+    border-bottom-color: var(--c-acento);
+  }
+</style>

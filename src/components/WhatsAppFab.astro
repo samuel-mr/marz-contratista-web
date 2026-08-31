@@ -1,0 +1,41 @@
+---
+import IconoWhatsApp from './IconoWhatsApp.astro';
+import { waHref } from '../data/sitio';
+---
+
+<a
+  class="fab"
+  href={waHref}
+  target="_blank"
+  rel="noopener"
+  aria-label="Escribir por WhatsApp"
+  data-umami-event="whatsapp-flotante"
+>
+  <IconoWhatsApp size={30} />
+</a>
+
+<style>
+  /* Verde oficial de marca WhatsApp: intencionalmente fuera de la paleta
+     del sitio. Es color de marca externo, no un token propio. */
+  .fab {
+    position: fixed;
+    right: var(--e-20);
+    bottom: var(--e-20);
+    z-index: 50;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--c-whatsapp);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--sombra-fab);
+    transition: background-color 0.12s ease;
+  }
+
+  .fab:hover {
+    background: var(--c-whatsapp-hover);
+    color: #ffffff;
+  }
+</style>

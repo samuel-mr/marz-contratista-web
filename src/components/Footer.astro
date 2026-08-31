@@ -1,0 +1,33 @@
+---
+import { empresa, telHref } from '../data/sitio';
+---
+
+<footer class="footer">
+  <span>{empresa.nombre} · {empresa.ciudad}</span>
+  <div class="enlaces">
+    <a href={telHref}>{empresa.telefono}</a>
+    <a href={`mailto:${empresa.email}`}>{empresa.email}</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: var(--e-18) var(--e-20);
+    border-top: var(--b-hairline);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    opacity: 0.6;
+  }
+
+  .enlaces {
+    display: flex;
+    gap: var(--e-16);
+    flex-wrap: wrap;
+  }
+</style>

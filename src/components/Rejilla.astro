@@ -1,0 +1,23 @@
+---
+/**
+ * Rejilla auto-fit. Colapsa sola a una columna sin media queries:
+ * el diseño es mobile-first y no necesita breakpoints.
+ */
+interface Props {
+  /** Ancho mínimo de columna. Servicios/Testimonios 240px, Stats 220px. */
+  min?: string;
+}
+const { min = '240px' } = Astro.props;
+---
+
+<div class="rejilla" style={`--min:${min}`}>
+  <slot />
+</div>
+
+<style>
+  .rejilla {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(var(--min), 1fr));
+    gap: var(--e-16);
+  }
+</style>

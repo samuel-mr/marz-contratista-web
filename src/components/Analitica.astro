@@ -1,0 +1,14 @@
+---
+/*
+ * Umami self-hosted. Inerte mientras no existan las variables de entorno,
+ * así que el sitio funciona sin analítica y no hay que tocar código para
+ * activarla: basta con crear .env a partir de .env.example.
+ *
+ * Los clics se rastrean con el atributo data-umami-event, que el propio
+ * tracker de Umami intercepta. No hace falta JS propio.
+ */
+const src = import.meta.env.PUBLIC_UMAMI_SRC;
+const id = import.meta.env.PUBLIC_UMAMI_ID;
+---
+
+{src && id && <script defer src={src} data-website-id={id}></script>}

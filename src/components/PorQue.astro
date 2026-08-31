@@ -1,0 +1,38 @@
+---
+import Seccion from './Seccion.astro';
+import Rejilla from './Rejilla.astro';
+import { stats } from '../data/sitio';
+---
+
+<Seccion titulo="Por qué elegirnos" id="por-que">
+  <Rejilla min="220px">
+    {
+      stats.map((s) => (
+        <div class="stat">
+          <p class="cifra">{s.cifra}</p>
+          <p class="etiqueta">{s.etiqueta}</p>
+        </div>
+      ))
+    }
+  </Rejilla>
+</Seccion>
+
+<style>
+  .stat {
+    padding: var(--e-14) 0;
+  }
+
+  .cifra {
+    font-family: var(--f-titulo);
+    font-size: 36px;
+    color: var(--c-acento);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .etiqueta {
+    font-size: 14px;
+    opacity: 0.75;
+    margin: var(--e-6) 0 0;
+  }
+</style>

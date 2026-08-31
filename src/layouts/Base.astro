@@ -1,0 +1,41 @@
+---
+import { Font } from 'astro:assets';
+import Analitica from '../components/Analitica.astro';
+import '../styles/tokens.css';
+import { seo } from '../data/sitio';
+import { ruta } from '../lib/rutas';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+const { titulo = seo.titulo, descripcion = seo.descripcion } = Astro.props;
+
+// Astro.site viene de `site` en astro.config.mjs.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{titulo}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="icon" type="image/svg+xml" href={ruta("favicon.svg")} />
+
+    <!-- Fuentes self-hosted por la Fonts API de Astro. Preload solo en las
+         dos familias, que ambas aparecen above the fold. -->
+    <Font cssVariable="--fuente-titulo" preload />
+    <Font cssVariable="--fuente-cuerpo" preload />
+
+    <Analitica />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

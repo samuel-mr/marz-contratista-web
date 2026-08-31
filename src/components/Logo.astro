@@ -1,0 +1,28 @@
+---
+/**
+ * Marca de Excavaciones Martínez — cucharón de excavadora.
+ * Usa currentColor, así que hereda el color del contexto (amarillo sobre
+ * fondo oscuro, oscuro sobre la banda amarilla). Sin variantes de archivo.
+ */
+interface Props {
+  /** Lado en px. El favicon usa 32; el header, 26. */
+  size?: number;
+  class?: string;
+}
+const { size = 26, class: clase } = Astro.props;
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 32 32"
+  fill="currentColor"
+  aria-hidden="true"
+  focusable="false"
+  class={clase}
+>
+  <polygon points="5,4 27,4 23.5,20 8.5,20"></polygon>
+  <polygon points="9,21 13,21 12,26.5"></polygon>
+  <polygon points="14,21 18,21 17.4,27"></polygon>
+  <polygon points="19,21 23,21 21.6,26.5"></polygon>
+</svg>

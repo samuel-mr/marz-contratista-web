@@ -1,0 +1,60 @@
+---
+import Boton from './Boton.astro';
+import IconoTelefono from './IconoTelefono.astro';
+import { empresa, telHref, waHref } from '../data/sitio';
+---
+
+<section class="banda">
+  <div class="interior">
+    <h2>¿Necesitas maquinaria para tu obra?</h2>
+    <p>Contáctanos por teléfono o WhatsApp y te respondemos al momento.</p>
+    <div class="acciones">
+      <Boton href={telHref} variante="dark" ancho evento="llamar-cta-final">
+        <IconoTelefono />
+        <span>{empresa.telefono}</span>
+      </Boton>
+      <Boton
+        href={waHref}
+        variante="darkOutline"
+        ancho
+        externo
+        evento="whatsapp-cta-final"
+      >
+        WhatsApp
+      </Boton>
+    </div>
+  </div>
+</section>
+
+<style>
+  .banda {
+    background: var(--c-acento);
+    color: var(--c-bg);
+    padding: var(--pad-seccion);
+  }
+
+  .interior {
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 30px;
+    letter-spacing: 0.03em;
+    margin: 0 0 var(--e-12);
+  }
+
+  p {
+    font-size: 15px;
+    opacity: 0.8;
+    margin: 0 0 var(--e-20);
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--e-12);
+  }
+</style>

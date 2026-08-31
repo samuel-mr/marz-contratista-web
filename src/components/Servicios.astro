@@ -1,0 +1,45 @@
+---
+import Seccion from './Seccion.astro';
+import Rejilla from './Rejilla.astro';
+import Tarjeta from './Tarjeta.astro';
+import { servicios } from '../data/sitio';
+---
+
+<Seccion titulo="Servicios" regla="acento" id="servicios">
+  <Rejilla min="240px">
+    {
+      servicios.map((s) => (
+        <Tarjeta>
+          <p class="numero">{s.numero}</p>
+          <h3 class="nombre">{s.titulo}</h3>
+          <p class="cuerpo">{s.cuerpo}</p>
+        </Tarjeta>
+      ))
+    }
+  </Rejilla>
+</Seccion>
+
+<style>
+  .numero {
+    font-family: var(--f-titulo);
+    font-size: 26px;
+    color: var(--c-acento);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .nombre {
+    font-family: var(--f-cuerpo);
+    font-weight: 600;
+    font-size: 15px;
+    text-transform: none;
+    margin: var(--e-6) 0;
+  }
+
+  .cuerpo {
+    font-size: 13.5px;
+    line-height: 1.4;
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>

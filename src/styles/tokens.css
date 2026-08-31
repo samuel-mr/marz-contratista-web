@@ -1,0 +1,108 @@
+/*
+ * Design tokens de "Obra Nocturna".
+ * Fuente de verdad de la identidad visual del sitio.
+ * Cambiar un valor aquí lo propaga a todo el sitio.
+ */
+:root {
+  /* ---- Color ---- */
+  --c-bg: #14151a;
+  --c-texto: #f2f2f0;
+  --c-acento: #f4c430;
+  --c-acento-hover: #e0b528;
+  --c-acento-claro: #ffd863;
+  --c-superficie: #1c1d22;
+  --c-borde: #2a2b30;
+  --c-borde-hover: #22242b;
+  --c-whatsapp: #25d366;
+  --c-whatsapp-hover: #1eba59;
+
+  /* ---- Tipografía ----
+     --fuente-titulo y --fuente-cuerpo las inyecta la Fonts API de Astro
+     (ver astro.config.mjs). Aquí solo se les da un fallback por si la
+     descarga falla. */
+  --f-titulo: var(--fuente-titulo), "Bebas Neue", Impact, sans-serif;
+  --f-cuerpo: var(--fuente-cuerpo), "Work Sans", system-ui, sans-serif;
+
+  /* ---- Espaciado ---- */
+  --e-5: 5px;
+  --e-6: 6px;
+  --e-8: 8px;
+  --e-10: 10px;
+  --e-12: 12px;
+  --e-14: 14px;
+  --e-16: 16px;
+  --e-18: 18px;
+  --e-20: 20px;
+  --e-22: 22px;
+  --e-24: 24px;
+  --e-28: 28px;
+  --e-48: 48px;
+
+  /* ---- Layout ---- */
+  --ancho-max: 1100px;
+  --pad-seccion: var(--e-48) var(--e-20);
+  --target-tactil: 44px;
+
+  /* ---- Bordes ---- */
+  --b-hairline: 1px solid var(--c-borde);
+  --b-regla: 2px;
+  --b-outline: 1.5px;
+
+  /* ---- Sombra (la única del sistema) ---- */
+  --sombra-fab: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ---- Reset mínimo ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--c-bg);
+  color: var(--c-texto);
+  font-family: var(--f-cuerpo);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--f-titulo);
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+a {
+  color: var(--c-acento);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--c-acento-claro);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Foco visible en todo el sitio. Sobre la banda amarilla se invierte
+   (ver CtaFinal.astro). */
+:focus-visible {
+  outline: 2px solid var(--c-acento);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

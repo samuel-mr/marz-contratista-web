@@ -1,0 +1,40 @@
+# ---- Dependencias ----
+node_modules/
+.pnpm-store/
+.yarn/
+!.yarn/releases
+
+# ---- Build de Astro ----
+dist/
+.astro/
+.output/
+.vercel/
+.netlify/
+
+# ---- Entorno ----
+.env
+.env.*
+!.env.example
+
+# ---- Runtime local de gstack (contiene tokens) ----
+.gstack/
+
+# ---- Sistema operativo ----
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# ---- Editores ----
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+.idea/
+*.swp
+
+# ---- Logs ----
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*

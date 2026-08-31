@@ -1,0 +1,128 @@
+---
+import { Image, getImage } from 'astro:assets';
+import hero from '../assets/hero.webp';
+import Boton from './Boton.astro';
+import IconoTelefono from './IconoTelefono.astro';
+import { empresa, telHref, waHref } from '../data/sitio';
+
+/*
+ * Recorte 4:5 centrado para móvil, generado en build desde el MISMO archivo
+ * fuente (1920×1072). No hay un segundo asset que mantener sincronizado:
+ * si se reemplaza hero.webp, el recorte se regenera en el siguiente build.
+ * `position` acepta los mismos valores que object-position de CSS.
+ */
+const heroMovil = await getImage({
+  src: hero,
+  width: 800,
+  height: 1000,
+  fit: 'cover',
+  position: 'center',
+  format: 'webp',
+  quality: 72,
+});
+---
+
+<section class="hero">
+  <div class="texto">
+    <span class="tag">{empresa.ciudad}</span>
+    <h1>Excavación y movimiento de tierras con maquinaria pesada</h1>
+    <p>
+      Excavación de terrenos, nivelación y demolición de estructuras. Años de
+      experiencia, precios competitivos y cumplimiento de plazos garantizado.
+    </p>
+    <div class="acciones">
+      <Boton href={telHref} variante="solid" evento="llamar-hero">
+        <IconoTelefono />
+        <span>Llamar: {empresa.telefono}</span>
+      </Boton>
+      <Boton href={waHref} variante="outline" externo evento="whatsapp-hero">WhatsApp</Boton>
+    </div>
+  </div>
+
+  <div class="media">
+    <picture>
+      <source
+        media="(max-width: 639px)"
+        srcset={heroMovil.src}
+        width="800"
+        height="1000"
+      />
+      <Image
+        src={hero}
+        alt="Excavadora de maquinaria pesada trabajando en un terreno en obra"
+        widths={[960, 1440, 1920]}
+        sizes="100vw"
+        quality={72}
+        priority
+        class="foto"
+      />
+    </picture>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--e-24);
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: var(--pad-seccion);
+  }
+
+  .tag {
+    display: inline-block;
+    margin-bottom: var(--e-12);
+    background: var(--c-acento);
+    color: var(--c-bg);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: var(--e-5) var(--e-10);
+  }
+
+  h1 {
+    font-size: clamp(32px, 7vw, 54px);
+    line-height: 0.98;
+    letter-spacing: 0.01em;
+    margin: 0 0 var(--e-14);
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 520px;
+    margin: 0 0 var(--e-22);
+    opacity: 0.75;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+
+  .media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border-top: 3px solid var(--c-acento);
+    background: var(--c-superficie);
+    overflow: hidden;
+  }
+
+  @media (min-width: 640px) {
+    .media {
+      aspect-ratio: 16 / 9;
+    }
+  }
+
+  .media :global(img),
+  .media picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>
