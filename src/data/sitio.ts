@@ -4,7 +4,7 @@
  */
 
 export const empresa = {
-  nombre: 'Excavaciones Martínez',
+  nombre: 'MARZ CONTRATISTAS',
   ciudad: 'Lima, Perú',
   telefono: '+51 972 014 679',
   /** Formato E.164 sin espacios, para los href de tel: y wa.me */
@@ -17,7 +17,7 @@ export const telHref = `tel:${empresa.telefonoRaw}`;
 export const waHref = `https://wa.me/${empresa.whatsapp}`;
 
 export const seo = {
-  titulo: 'Excavaciones Martínez | Movimiento de tierras en Lima',
+  titulo: 'MARZ CONTRATISTAS | Movimiento de tierras en Lima',
   descripcion:
     'Excavación de terrenos, nivelación y demolición con maquinaria pesada en Lima. Precios competitivos y cumplimiento de plazos. Llámanos o escríbenos por WhatsApp.',
 } as const;
