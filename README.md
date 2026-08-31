@@ -149,7 +149,11 @@ repositorio sin editar código:
 | Dominio propio (variable `SITE`) | el valor de `SITE` | raíz |
 | Local (`pnpm dev`) | `http://localhost:4321` | raíz |
 
-En GitHub Actions, `GITHUB_REPOSITORY` llega solo. No hace falta pasar nada.
+En GitHub Actions no se usa esa derivación: el workflow obtiene la URL real de
+la API de Pages (`actions/configure-pages`) y la pasa como `--site` y `--base`,
+que tienen prioridad sobre `astro.config.mjs`. El resultado es el mismo, pero
+sin deducir nada del nombre del repositorio, así que funciona igual con dominio
+propio. La derivación de `astro.config.mjs` queda como respaldo y para local.
 
 ### Pasos
 

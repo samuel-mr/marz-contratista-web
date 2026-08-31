@@ -1,27 +1,81 @@
-# Despliegue a GitHub Pages con la acción oficial de Astro.
-# Requiere activar Pages en Settings > Pages > Source: GitHub Actions.
-name: Deploy to GitHub Pages
+# Despliegue del sitio Astro a GitHub Pages.
+#
+# Requiere: Settings > Pages > Source: GitHub Actions.
+name: Deploy Astro site to Pages
 
 on:
+  # Cada push a la rama por defecto
   push:
-    branches: [main]
+    branches: ["main"]
+
+  # Permite lanzarlo a mano desde la pestaña Actions
   workflow_dispatch:
 
+# Permisos del GITHUB_TOKEN para desplegar a Pages.
+# id-token es necesario para el OIDC que usa deploy-pages.
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Un solo despliegue a la vez. No cancela el que esté en curso: los
+# despliegues de producción deben poder terminar.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+env:
+  BUILD_PATH: "."
+
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Install, build, and upload
-        uses: withastro/action@v6
+
+      # La versión de pnpm sale del campo `packageManager` de package.json,
+      # así que CI y local usan exactamente la misma.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          # Astro 7 exige >=22.12. Las versiones impares no están soportadas.
+          node-version: "24"
+          cache: pnpm
+          cache-dependency-path: ${{ env.BUILD_PATH }}/pnpm-lock.yaml
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v6
+
+      # --frozen-lockfile: si package.json y pnpm-lock.yaml se desincronizan,
+      # CI falla en vez de resolver por su cuenta y construir con versiones
+      # distintas a las probadas en local.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: ${{ env.BUILD_PATH }}
+
+      # site y base salen de la API de Pages, no de deducirlos del nombre del
+      # repositorio. Funciona igual con dominio propio. Los flags de CLI
+      # tienen prioridad sobre astro.config.mjs.
+      - name: Build with Astro
+        run: |
+          pnpm astro build \
+            --site "${{ steps.pages.outputs.origin }}" \
+            --base "${{ steps.pages.outputs.base_path }}"
+        working-directory: ${{ env.BUILD_PATH }}
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ${{ env.BUILD_PATH }}/dist
 
   deploy:
+    name: Deploy
     needs: build
     runs-on: ubuntu-latest
     environment:
