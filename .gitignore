@@ -1,8 +1,6 @@
 # ---- Dependencias ----
 node_modules/
 .pnpm-store/
-.yarn/
-!.yarn/releases
 
 # ---- Build de Astro ----
 dist/
@@ -35,6 +33,4 @@ Thumbs.db
 
 # ---- Logs ----
 *.log
-npm-debug.log*
 pnpm-debug.log*
-yarn-error.log*

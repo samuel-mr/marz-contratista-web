@@ -9,13 +9,19 @@ telefónica o WhatsApp. No hay formulario ni backend.
 ## Arranque
 
 ```bash
-npm install
-npm run dev      # desarrollo
-npm run build    # genera dist/
-npm run preview  # sirve dist/ (se demoniza: `npx astro preview stop` para pararlo)
+pnpm install
+pnpm dev      # desarrollo
+pnpm build    # genera dist/
+pnpm preview  # sirve dist/ (se demoniza: `pnpm astro preview stop` para pararlo)
 ```
 
-Requiere **Node ≥ 22.12**. Las versiones impares (v23, v25) no están soportadas por Astro.
+Requisitos:
+
+- **Node ≥ 22.12.** Las versiones impares (v23, v25) no están soportadas por Astro.
+- **pnpm ≥ 11.** El proyecto usa pnpm **exclusivamente**; está fijado en
+  `packageManager` para que Corepack use la versión correcta.
+  No usar `npm` ni `yarn`: generarían un lockfile paralelo y la acción de
+  despliegue elige el gestor a partir del lockfile que encuentre.
 
 ## Stack
 
@@ -104,6 +110,17 @@ solo. Para reencuadrar, cambiar `position` en `src/components/Hero.astro`
 `quality: 72` es explícita a propósito. Con la calidad por defecto, la variante
 de 1920px se re-codificaba **más pesada que el propio original**.
 
+### sharp es dependencia explícita
+
+`sharp` está en `dependencies` a propósito, aunque Astro lo traiga por dentro.
+El `node_modules` estricto de pnpm no lo expone a la raíz del proyecto, y sin
+él Astro **no falla**: emite un aviso y sirve la imagen original sin optimizar,
+sin `srcset` y sin el recorte de móvil. No quitarlo.
+
+Los scripts de instalación permitidos se declaran en `pnpm-workspace.yaml`
+(`allowBuilds`). pnpm los bloquea por defecto como medida de cadena de
+suministro.
+
 ## Analítica
 
 Umami self-hosted. Inerte mientras no existan las variables de entorno, así que
@@ -130,7 +147,7 @@ repositorio sin editar código:
 | Repo de proyecto (`usuario/mi-repo`) | `https://usuario.github.io` | `/mi-repo` |
 | User page (`usuario/usuario.github.io`) | `https://usuario.github.io` | raíz |
 | Dominio propio (variable `SITE`) | el valor de `SITE` | raíz |
-| Local (`npm run dev`) | `http://localhost:4321` | raíz |
+| Local (`pnpm dev`) | `http://localhost:4321` | raíz |
 
 En GitHub Actions, `GITHUB_REPOSITORY` llega solo. No hace falta pasar nada.
 
