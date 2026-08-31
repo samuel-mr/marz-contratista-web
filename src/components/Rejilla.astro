@@ -4,20 +4,45 @@
  * el diseño es mobile-first y no necesita breakpoints.
  */
 interface Props {
-  /** Ancho mínimo de columna. Servicios/Testimonios 240px, Stats 220px. */
+  /** Ancho mínimo de columna en modo `auto`. */
   min?: string;
+  /**
+   * `auto`  → tantas columnas como quepan (auto-fit).
+   * `pares` → 1, 2 o 4 columnas, nunca 3. Con 4 tarjetas, auto-fit deja una
+   *           suelta en la segunda fila en el rango de tablet; esto lo evita.
+   */
+  columnas?: 'auto' | 'pares';
 }
-const { min = '240px' } = Astro.props;
+const { min = '240px', columnas = 'auto' } = Astro.props;
 ---
 
-<div class="rejilla" style={`--min:${min}`}>
+<div class:list={['rejilla', columnas]} style={`--min:${min}`}>
   <slot />
 </div>
 
 <style>
   .rejilla {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--min), 1fr));
     gap: var(--e-16);
+  }
+
+  .auto {
+    grid-template-columns: repeat(auto-fit, minmax(var(--min), 1fr));
+  }
+
+  .pares {
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 560px) {
+    .pares {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1040px) {
+    .pares {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 </style>

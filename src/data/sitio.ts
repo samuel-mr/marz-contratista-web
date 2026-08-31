@@ -26,25 +26,43 @@ export interface Servicio {
   numero: string;
   titulo: string;
   cuerpo: string;
+  /** Tipos de obra concretos. Además de orientar al cliente, cubren búsquedas
+   *  locales que el resto de la página no toca ("calzaduras Lima"). */
+  etiquetas: string[];
 }
 
 export const servicios: Servicio[] = [
   {
     numero: '01',
-    titulo: 'Excavación de terrenos',
+    titulo: 'Excavación',
     cuerpo:
-      'Excavación en roca y tierra para cimentaciones, zanjas y obras civiles.',
+      'Excavación en roca y tierra para cimentaciones y obras civiles.',
+    etiquetas: ['Cisternas', 'Zapatas', 'Zanjas', 'Calzaduras', 'Sótanos'],
   },
   {
     numero: '02',
-    titulo: 'Nivelación y desmonte',
+    titulo: 'Nivelación y movimiento de tierras',
     cuerpo:
       'Preparación y nivelación de terrenos para construcción y urbanización.',
+    etiquetas: [
+      'Nivelación',
+      'Movimiento de tierras',
+      'Relleno',
+      'Compactado',
+      'Afirmado',
+    ],
   },
   {
     numero: '03',
-    titulo: 'Demolición de estructuras',
+    titulo: 'Demolición',
     cuerpo: 'Demolición con martillo hidráulico y retiro de escombros.',
+    etiquetas: ['Casas', 'Edificios', 'Tanques', 'Estructuras de concreto'],
+  },
+  {
+    numero: '04',
+    titulo: 'Eliminación de desmonte',
+    cuerpo: 'Retiro con volquete y disposición en botadero autorizado.',
+    etiquetas: ['Volquete', 'Botadero autorizado'],
   },
 ];
 

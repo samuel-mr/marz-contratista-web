@@ -6,13 +6,18 @@ import { servicios } from '../data/sitio';
 ---
 
 <Seccion titulo="Servicios" regla="acento" id="servicios">
-  <Rejilla min="240px">
+  <Rejilla columnas="pares">
     {
       servicios.map((s) => (
         <Tarjeta>
           <p class="numero">{s.numero}</p>
           <h3 class="nombre">{s.titulo}</h3>
           <p class="cuerpo">{s.cuerpo}</p>
+          <ul class="etiquetas">
+            {s.etiquetas.map((e) => (
+              <li>{e}</li>
+            ))}
+          </ul>
         </Tarjeta>
       ))
     }
@@ -41,5 +46,31 @@ import { servicios } from '../data/sitio';
     line-height: 1.4;
     opacity: 0.7;
     margin: 0;
+  }
+
+  /* Lista real, no divs: es una enumeración de tipos de obra y los lectores
+     de pantalla deben anunciarla como tal. El aspecto de chip es solo CSS. */
+  .etiquetas {
+    margin: var(--e-12) 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  /* Sin white-space:nowrap a propósito: una etiqueta larga como
+     "Estructuras de concreto" ocupa su propia fila y, si hiciera falta,
+     parte en dos renglones dentro de su recuadro. Así nunca se desborda
+     ni hay que abreviarla. */
+  .etiquetas li {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.35;
+    border: var(--b-hairline);
+    padding: 3px 7px;
+    opacity: 0.75;
   }
 </style>
