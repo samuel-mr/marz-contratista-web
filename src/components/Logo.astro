@@ -1,28 +1,41 @@
 ---
 /**
- * Marca de MARZ CONTRATISTAS — cucharón de excavadora.
- * Usa currentColor, así que hereda el color del contexto (amarillo sobre
- * fondo oscuro, oscuro sobre la banda amarilla). Sin variantes de archivo.
+ * Marca de MRX CONTRATISTAS — el brazo y el cucharón del isotipo oficial.
+ *
+ * Este archivo define el rojo de la marca: su #BC2425 es de donde sale
+ * --c-acento, no al revés. Si alguna vez cambia el isotipo, el token va detrás.
+ *
+ * Es el PNG que entregó el cliente, sin vectorizar. Eso tiene dos
+ * consecuencias que conviene recordar antes de reutilizarlo:
+ *   1. Es de color fijo, no hereda `currentColor`. No sirve sobre la banda
+ *      roja, donde haría falta una versión clara.
+ *   2. El original mide 415×387, así que por encima de ~200px de alto se
+ *      empieza a notar. Para vallas, polos o cualquier pieza impresa hace
+ *      falta un SVG.
+ *
+ * `size` es el ALTO en px; el ancho sale de la proporción del archivo.
  */
+import { Image } from 'astro:assets';
+import icono from '../assets/icono.png';
+
 interface Props {
-  /** Lado en px. El favicon usa 32; el header, 26. */
+  /** Alto en px. El header usa 26. */
   size?: number;
   class?: string;
 }
 const { size = 26, class: clase } = Astro.props;
+
+const alto = size;
+const ancho = Math.round((icono.width / icono.height) * size);
 ---
 
-<svg
-  width={size}
-  height={size}
-  viewBox="0 0 32 32"
-  fill="currentColor"
-  aria-hidden="true"
-  focusable="false"
+<Image
+  src={icono}
+  alt=""
+  width={ancho}
+  height={alto}
+  densities={[1, 2, 3]}
+  loading="eager"
   class={clase}
->
-  <polygon points="5,4 27,4 23.5,20 8.5,20"></polygon>
-  <polygon points="9,21 13,21 12,26.5"></polygon>
-  <polygon points="14,21 18,21 17.4,27"></polygon>
-  <polygon points="19,21 23,21 21.6,26.5"></polygon>
-</svg>
+  aria-hidden="true"
+/>

@@ -28,14 +28,12 @@ import { inicio } from '../lib/rutas';
     border-bottom: var(--b-hairline);
   }
 
+  /* El isotipo es un PNG de color fijo, así que la marca no propaga
+     `color`; el wordmark pone el suyo. */
   .marca {
     display: flex;
     align-items: center;
     gap: var(--e-10);
-    color: var(--c-acento);
-  }
-  .marca:hover {
-    color: var(--c-acento);
   }
 
   .wordmark {

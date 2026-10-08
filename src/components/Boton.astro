@@ -4,14 +4,18 @@
  * (tel: / wa.me), así que nunca renderiza <button>.
  *
  * Variantes:
- *   solid        amarillo sólido sobre fondo oscuro
- *   outline      contorno amarillo sobre fondo oscuro
- *   dark         oscuro sólido sobre la banda amarilla
- *   darkOutline  contorno oscuro sobre la banda amarilla
+ *   solid           rojo sólido sobre el fondo claro
+ *   outline         contorno rojo sobre el fondo claro
+ *   inverso         claro sólido sobre la banda roja
+ *   inversoOutline  contorno claro sobre la banda roja
+ *
+ * `inverso` se llamaba `dark` cuando la banda era amarilla y el botón
+ * encima iba en negro. Con el tema claro la relación se invirtió: la banda
+ * es rojo y el botón encima es claro. El nombre sigue al rol, no al color.
  */
 interface Props {
   href: string;
-  variante?: 'solid' | 'outline' | 'dark' | 'darkOutline';
+  variante?: 'solid' | 'outline' | 'inverso' | 'inversoOutline';
   /** Abre en pestaña nueva con rel de seguridad. Para los enlaces de WhatsApp. */
   externo?: boolean;
   /** Nombre accesible cuando el texto visible no basta. */
@@ -90,31 +94,31 @@ const {
     color: var(--c-acento);
   }
   .outline:hover {
-    background: rgba(244, 196, 48, 0.12);
+    background: rgba(188, 36, 37, 0.08);
     color: var(--c-acento);
   }
 
-  .dark {
+  .inverso {
     background: var(--c-bg);
     color: var(--c-acento);
   }
-  .dark:hover {
+  .inverso:hover {
     background: var(--c-borde-hover);
     color: var(--c-acento);
   }
 
-  .darkOutline {
+  .inversoOutline {
     border: var(--b-outline) solid var(--c-bg);
     color: var(--c-bg);
   }
-  .darkOutline:hover {
-    background: rgba(20, 21, 26, 0.08);
+  .inversoOutline:hover {
+    background: rgba(250, 249, 247, 0.14);
     color: var(--c-bg);
   }
 
-  /* Sobre la banda amarilla el foco amarillo sería invisible. */
-  .dark:focus-visible,
-  .darkOutline:focus-visible {
+  /* Sobre la banda roja el foco rojo sería invisible. */
+  .inverso:focus-visible,
+  .inversoOutline:focus-visible {
     outline-color: var(--c-bg);
   }
 </style>

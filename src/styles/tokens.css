@@ -1,18 +1,31 @@
 /*
- * Design tokens de "Obra Nocturna".
+ * Design tokens de MRX CONTRATISTAS.
  * Fuente de verdad de la identidad visual del sitio.
  * Cambiar un valor aquí lo propaga a todo el sitio.
+ *
+ * Tema claro. El acento #BC2425 sale del isotipo oficial (src/assets/icono.png,
+ * PNG de paleta indexada, así que el valor es exacto). El full-brand.jpg
+ * muestrea ~#AE272D, pero es JPEG: eso es deriva de compresión, no otro color.
+ *
+ * El acento hace UN solo trabajo según el contexto:
+ *   - sobre fondo claro, es texto y filete (5.8:1, AA);
+ *   - como relleno, siempre lleva --c-bg encima (5.8:1, AA).
+ * Lo que no existe es acento oscuro sobre acento: un gris oscuro sobre #BC2425
+ * da 2.0:1 y falla. Por eso los botones y la banda final usan --c-bg como
+ * color de texto.
  */
 :root {
-  /* ---- Color ---- */
-  --c-bg: #14151a;
-  --c-texto: #f2f2f0;
-  --c-acento: #f4c430;
-  --c-acento-hover: #e0b528;
-  --c-acento-claro: #ffd863;
-  --c-superficie: #1c1d22;
-  --c-borde: #2a2b30;
-  --c-borde-hover: #22242b;
+  /* ---- Color ----
+     Los neutros llevan un sesgo cálido deliberado (más rojo que azul en el
+     gris): emparentan con el acento y con el polvo de obra de las fotos.
+     Un gris puro al lado del rojo se ve azulado. */
+  --c-bg: #faf9f7;
+  --c-texto: #1b1917;
+  --c-acento: #bc2425;
+  --c-acento-hover: #9c1f20;
+  --c-superficie: #f0ede8;
+  --c-borde: #d9d3cb;
+  --c-borde-hover: #e9e4dd;
   --c-whatsapp: #25d366;
   --c-whatsapp-hover: #1eba59;
 
@@ -46,10 +59,13 @@
   /* ---- Bordes ---- */
   --b-hairline: 1px solid var(--c-borde);
   --b-regla: 2px;
+  /* El filete rojo sobre la foto del hero. Más grueso que --b-regla a
+     propósito: tiene que leerse contra una imagen, no contra fondo liso. */
+  --b-regla-foto: 3px;
   --b-outline: 1.5px;
 
   /* ---- Sombra (la única del sistema) ---- */
-  --sombra-fab: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --sombra-fab: 0 4px 12px rgba(27, 25, 23, 0.18);
 }
 
 /* ---- Reset mínimo ---- */
@@ -65,7 +81,6 @@ body {
   color: var(--c-texto);
   font-family: var(--f-cuerpo);
   min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
 }
 
 h1,
@@ -83,7 +98,7 @@ a {
 }
 
 a:hover {
-  color: var(--c-acento-claro);
+  color: var(--c-acento-hover);
 }
 
 img {
@@ -91,8 +106,8 @@ img {
   max-width: 100%;
 }
 
-/* Foco visible en todo el sitio. Sobre la banda amarilla se invierte
-   (ver CtaFinal.astro). */
+/* Foco visible en todo el sitio. Sobre la banda roja se invierte
+   (ver CtaFinal.astro y la variante `inverso` de Boton.astro). */
 :focus-visible {
   outline: 2px solid var(--c-acento);
   outline-offset: 2px;

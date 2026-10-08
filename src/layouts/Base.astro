@@ -26,7 +26,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta name="description" content={descripcion} />
     <link rel="canonical" href={canonical} />
 
-    <link rel="icon" type="image/svg+xml" href={ruta("favicon.svg")} />
+    <!-- PNG y no SVG porque el isotipo de la marca llegó como PNG; no hay
+         vector del que partir. Ver src/components/Logo.astro. -->
+    <link rel="icon" type="image/png" sizes="32x32" href={ruta("favicon.png")} />
+    <link rel="apple-touch-icon" href={ruta("apple-touch-icon.png")} />
 
     <!-- Fuentes self-hosted por la Fonts API de Astro. Preload solo en las
          dos familias, que ambas aparecen above the fold. -->

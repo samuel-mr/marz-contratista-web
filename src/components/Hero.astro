@@ -1,31 +1,66 @@
 ---
-import { Image, getImage } from 'astro:assets';
-import hero from '../assets/hero.webp';
+import { getImage } from 'astro:assets';
+import hero from '../assets/hero-panoramica.webp';
 import Boton from './Boton.astro';
 import IconoTelefono from './IconoTelefono.astro';
-import { empresa, telHref, waHref } from '../data/sitio';
+import { empresa, telHref } from '../data/sitio';
 
 /*
- * Recorte 4:5 centrado para móvil, generado en build desde el MISMO archivo
- * fuente (1920×1072). No hay un segundo asset que mantener sincronizado:
- * si se reemplaza hero.webp, el recorte se regenera en el siguiente build.
- * `position` acepta los mismos valores que object-position de CSS.
+ * La foto fuente es 1920×800 (2.4:1). Esa proporción es el argumento de la
+ * imagen: el valle, la fila de volquetes alejándose y la excavadora contra el
+ * cerro solo se leen en formato ancho. De ahí las dos disposiciones:
+ *
+ *   ≥900px  La foto ocupa el hero entero y el texto va encima, a la izquierda,
+ *           sobre un velo claro. Funciona porque la foto ya está compuesta con
+ *           la máquina a la derecha y el valle a la izquierda. Cualquier foto
+ *           que la reemplace tiene que respetar esa composición.
+ *
+ *   <900px  Nada de texto encima. Una banda 2.4:1 en una pantalla de 390px
+ *           mide 162px: una rendija. Y texto claro-sobre-foto en un celular al
+ *           aire libre es justo donde se pierde la legibilidad. Así que se
+ *           apila: primero el texto sobre fondo liso (el teléfono tiene que
+ *           entrar sin scroll), después la foto recortada a 3:2.
+ *
+ * El recorte de móvil se genera en build desde el MISMO archivo, así que no hay
+ * un segundo asset que mantener sincronizado. 3:2 centrado es el único encuadre
+ * donde entran a la vez el volquete cargando y la excavadora: excavación y
+ * eliminación de desmonte en un solo cuadro.
+ *
+ * ---- Por qué el escritorio NO pasa por <Image> ----
+ *
+ * El archivo fuente ya viene comprimido y mide exactamente lo que se sirve
+ * (1920 de ancho). Volver a codificarlo lo engorda, porque re-comprimir un
+ * webp con pérdida añade ruido que cuesta bits. Medido en este build:
+ *
+ *     variante 1100px, q60  →  102 kB   (sí ahorra)
+ *     variante 1500px, q60  →  161 kB   ✗ más que el original
+ *     variante 1920px, q60  →  202 kB   ✗ un 41% más que el original
+ *     ORIGINAL              →  143 kB
+ *
+ * Y <Image> siempre emite además un fallback al ancho completo, así que con
+ * `widths` el navegador acababa descargando los 202 kB. Por eso el escritorio
+ * usa un <img> plano con `hero.src`: Vite copia el archivo tal cual, sin
+ * recodificar. Se pierde el srcset de escritorio (un portátil de 1000px baja
+ * 143 kB en vez de ~102 kB); se gana no servirle 202 kB a nadie.
+ *
+ * Si algún día la foto fuente llega sin comprimir, esto hay que rehacerlo:
+ * volver a <Image> con `widths` y medir otra vez.
  */
 const heroMovil = await getImage({
   src: hero,
-  width: 800,
-  height: 1000,
+  width: 900,
+  height: 600,
   fit: 'cover',
   position: 'center',
   format: 'webp',
-  quality: 72,
+  quality: 68,
 });
 ---
 
 <section class="hero">
   <div class="texto">
     <span class="tag">{empresa.ciudad}</span>
-    <h1>Excavación y movimiento de tierras con maquinaria pesada</h1>
+    <h1>Excavación, nivelación y movimiento de tierras con maquinaria pesada</h1>
     <p>
       Excavación de terrenos, nivelación y demolición de estructuras. Años de
       experiencia, precios competitivos y cumplimiento de plazos garantizado.
@@ -38,32 +73,36 @@ const heroMovil = await getImage({
     </div>
   </div>
 
-  <div class="media">
+  <div class="lienzo">
     <picture>
       <source
-        media="(max-width: 639px)"
+        media="(max-width: 899px)"
         srcset={heroMovil.src}
-        width="800"
-        height="1000"
+        width="900"
+        height="600"
       />
-      <Image
-        src={hero}
-        alt="Excavadora de maquinaria pesada trabajando en un terreno en obra"
-        widths={[960, 1440, 1920]}
-        sizes="100vw"
-        quality={72}
-        priority
+      <img
+        src={hero.src}
+        width={hero.width}
+        height={hero.height}
+        alt="Excavadora cargando un volquete en un movimiento de tierras en quebrada"
+        fetchpriority="high"
+        decoding="async"
         class="foto"
       />
     </picture>
+    <div class="velo"></div>
   </div>
 </section>
 
 <style>
   .hero {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--e-24);
+    position: relative;
+  }
+
+  .texto {
+    position: relative;
+    z-index: 1;
     max-width: var(--ancho-max);
     margin: 0 auto;
     padding: var(--pad-seccion);
@@ -102,26 +141,69 @@ const heroMovil = await getImage({
     gap: var(--e-12);
   }
 
-  .media {
+  .lienzo {
     position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    border-top: 3px solid var(--c-acento);
+    aspect-ratio: 3 / 2;
+    border-top: var(--b-regla-foto) solid var(--c-acento);
     background: var(--c-superficie);
     overflow: hidden;
   }
 
-  @media (min-width: 640px) {
-    .media {
-      aspect-ratio: 16 / 9;
-    }
-  }
-
-  .media :global(img),
-  .media picture {
+  .lienzo picture,
+  .lienzo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* Solo existe en la disposición superpuesta. */
+  .velo {
+    display: none;
+  }
+
+  @media (min-width: 900px) {
+    .hero {
+      display: flex;
+      align-items: center;
+      /* Crece con la pantalla pero con tope: sin él, a 1920px el hero pasa de
+         los 700px de alto y empuja los servicios fuera de la primera pantalla. */
+      min-height: clamp(460px, 36vw, 660px);
+      border-top: var(--b-regla-foto) solid var(--c-acento);
+    }
+
+    .lienzo {
+      position: absolute;
+      inset: 0;
+      aspect-ratio: auto;
+      border-top: 0;
+    }
+
+    .velo {
+      display: block;
+      position: absolute;
+      inset: 0;
+      /* El texto nunca pasa del 48% del ancho, así que basta con mantener el
+         velo por encima de ~0.6 hasta ahí: medido, eso deja el titular sobre
+         9:1 de contraste incluso donde la foto es más oscura. Más opacidad
+         solo lavaría la máquina, que es lo que la foto tiene que vender.
+         Si se ensancha el texto, hay que correr estos topes. */
+      background: linear-gradient(
+        95deg,
+        rgba(250, 249, 247, 0.97) 0%,
+        rgba(250, 249, 247, 0.92) 32%,
+        rgba(250, 249, 247, 0.62) 48%,
+        rgba(250, 249, 247, 0.18) 62%,
+        rgba(250, 249, 247, 0) 74%
+      );
+    }
+
+    .texto {
+      width: 100%;
+    }
+
+    .texto > * {
+      max-width: min(50%, 560px);
+    }
   }
 </style>
