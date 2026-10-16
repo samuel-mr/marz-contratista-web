@@ -48,8 +48,9 @@ jobs:
           cache: pnpm
           cache-dependency-path: ${{ env.BUILD_PATH }}/pnpm-lock.yaml
 
+      # Se queda aunque ya no se lean sus outputs: es el paso que habilita el
+      # entorno de Pages del que depende deploy-pages.
       - name: Setup Pages
-        id: pages
         uses: actions/configure-pages@v6
 
       # --frozen-lockfile: si package.json y pnpm-lock.yaml se desincronizan,
@@ -59,14 +60,18 @@ jobs:
         run: pnpm install --frozen-lockfile
         working-directory: ${{ env.BUILD_PATH }}
 
-      # site y base salen de la API de Pages, no de deducirlos del nombre del
-      # repositorio. Funciona igual con dominio propio. Los flags de CLI
-      # tienen prioridad sobre astro.config.mjs.
+      # Sin --site ni --base: astro.config.mjs es la única fuente de verdad.
+      #
+      # Antes se pasaban desde los outputs de configure-pages. Eso ataba el
+      # build al estado de Settings > Pages en el instante de ejecutarlo, y
+      # produjo dos fallos reales:
+      #   - el despliegue previo a conectar el dominio quedó con
+      #     base=/marz-contratista-web cocido, y al activar el dominio todos
+      #     los assets dieron 404;
+      #   - `origin` llega como http:// mientras "Enforce HTTPS" esté apagado,
+      #     lo que metía canonical URLs en http en el HTML.
       - name: Build with Astro
-        run: |
-          pnpm astro build \
-            --site "${{ steps.pages.outputs.origin }}" \
-            --base "${{ steps.pages.outputs.base_path }}"
+        run: pnpm build
         working-directory: ${{ env.BUILD_PATH }}
 
       - name: Upload artifact

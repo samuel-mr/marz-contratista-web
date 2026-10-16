@@ -182,59 +182,71 @@ Los CTAs ya llevan `data-umami-event`: `llamar-header`, `llamar-hero`,
 Salida 100% estática, una sola página, sin funciones de servidor. El workflow
 está en `.github/workflows/deploy.yml` (acción oficial `withastro/action`).
 
-**No hay nada que configurar.** `site` y `base` se derivan solos en
-`astro.config.mjs`, así que el proyecto se puede publicar en cualquier
-repositorio sin editar código:
+El destino es siempre el mismo: `https://mrxcontratistas.pe`, desde la raíz.
+Está escrito a mano en `astro.config.mjs` y el workflow no lo sobrescribe.
 
-| Dónde se publica | `site` | `base` |
+| Dónde | `site` | `base` |
 |---|---|---|
-| Repo de proyecto (`usuario/mi-repo`) | `https://usuario.github.io` | `/mi-repo` |
-| User page (`usuario/usuario.github.io`) | `https://usuario.github.io` | raíz |
-| Dominio propio (variable `SITE`) | el valor de `SITE` | raíz |
-| Local (`pnpm dev`) | `http://localhost:4321` | raíz |
+| Producción | `https://mrxcontratistas.pe` | raíz |
+| Preview (`SITE=... pnpm build`) | el valor de `SITE` | raíz |
+| Local (`pnpm dev`) | `https://mrxcontratistas.pe` | raíz |
 
-En GitHub Actions no se usa esa derivación: el workflow obtiene la URL real de
-la API de Pages (`actions/configure-pages`) y la pasa como `--site` y `--base`,
-que tienen prioridad sobre `astro.config.mjs`. El resultado es el mismo, pero
-sin deducir nada del nombre del repositorio, así que funciona igual con dominio
-propio. La derivación de `astro.config.mjs` queda como respaldo y para local.
+El porqué de que sean constantes y no se deriven está en
+[Dominio propio](#dominio-propio-mrxcontratistaspe): la derivación automática
+rompió el sitio en producción.
 
 ### Pasos
 
-1. Crear el repositorio en GitHub y hacer push de la rama `main`.
-2. **Settings → Pages → Source: GitHub Actions**.
-3. Listo. El workflow corre en cada push a `main`.
+1. **Settings → Pages → Source: GitHub Actions**.
+2. El workflow corre en cada push a `main`. No hay nada más que configurar.
 
-### Con dominio propio
+### Dominio propio: mrxcontratistas.pe
 
-El dominio elegido es **`mrxcontratistas.pe`**.
+**Ya está conectado.** DNS en Punto.pe, correo en Google Workspace.
 
-> **Todavía no está conectado, y el orden importa.** A fecha de hoy el dominio
-> no resuelve: `dig mrxcontratistas.pe` no devuelve nada. Si se añade
-> `public/CNAME` antes de que el DNS apunte a GitHub, Pages empieza a redirigir
-> la URL de `github.io` al dominio nuevo y **el sitio se cae** hasta que el DNS
-> propague. Por eso `public/CNAME` no está en el repo: es el último paso, no el
-> primero.
+| Qué | Estado |
+|---|---|
+| `A` del ápice | las cuatro IPs de GitHub Pages |
+| `CNAME` de `www` | `samuel-mr.github.io` |
+| Custom domain en Settings → Pages | `mrxcontratistas.pe` |
+| Certificado TLS | emitido para el ápice y `www`, expira 2027-01-14 |
+| **Enforce HTTPS** | **apagado** — pendiente de marcar |
 
-Orden correcto:
+#### No hay `public/CNAME`, y es correcto
 
-1. Registrar `mrxcontratistas.pe` y apuntar el DNS a GitHub Pages:
-   - cuatro registros `A` del ápice a `185.199.108.153`, `185.199.109.153`,
-     `185.199.110.153`, `185.199.111.153`;
-   - un `CNAME` de `www` a `<usuario>.github.io`.
-2. Esperar a que propague. Comprobar con `dig +short mrxcontratistas.pe`.
-3. **Settings → Pages → Custom domain**: escribir el dominio y esperar la
-   verificación. GitHub crea el `CNAME` en el repo por su cuenta.
-4. Marcar **Enforce HTTPS** cuando GitHub termine de emitir el certificado
-   (puede tardar hasta 24 h).
+Con `build_type: workflow` el dominio vive en los ajustes de Pages, no en un
+archivo del repositorio. La prueba es que el sitio ya se sirve en el dominio
+sin que ese archivo exista. Añadirlo sería un fichero que aparenta ser
+load-bearing sin serlo. Para comprobar el estado real:
 
-**No hace falta tocar el workflow.** `actions/configure-pages` lee la URL real
-que haya configurada en Settings → Pages y la pasa como `--site`, así que en
-cuanto el dominio esté puesto ahí el build lo usa solo. La variable `SITE` de
-`astro.config.mjs` existe solo para builds fuera de Actions; duplicar el dominio
-en el workflow crearía un segundo sitio donde mantenerlo sincronizado.
+```bash
+gh api repos/samuel-mr/marz-contratista-web/pages
+```
 
-`base` desaparece solo: un dominio propio sirve desde la raíz.
+#### `site` y `base` son constantes, no se derivan
+
+Están escritos a mano en `astro.config.mjs` y el workflow **no** los
+sobrescribe. Antes se tomaban de los outputs de `actions/configure-pages`, y
+eso ató el build al estado de Settings → Pages en el momento de ejecutarlo.
+Produjo dos fallos reales:
+
+1. **El 404 de todos los assets.** El dominio se conectó después del último
+   despliegue, así que el build en producción llevaba cocido
+   `base: "/marz-contratista-web"`. Al empezar a servir desde la raíz del
+   dominio, cada ruta apuntaba a un prefijo inexistente.
+2. **Canonical URLs en `http://`.** `steps.pages.outputs.origin` devuelve
+   `http://` mientras Enforce HTTPS esté apagado.
+
+La lección es que un build no debe depender de un ajuste externo que puede
+cambiar después de haberse construido. Si alguna vez cambia el dominio, se
+edita `astro.config.mjs` y se redespliega — un solo sitio donde tocarlo.
+
+#### Si el dominio cambia otra vez
+
+El `base` se fue del todo: el sitio asume raíz. Para volver a publicar bajo un
+subdirectorio (`usuario.github.io/repo/`) hay que reintroducir `base` en
+`astro.config.mjs`. Las rutas del código ya lo soportan: todas pasan por
+`ruta()` en `src/lib/rutas.ts`, que respeta `BASE_URL`.
 
 ## Pendiente antes de publicar
 
@@ -256,8 +268,9 @@ en el workflow crearía un segundo sitio donde mantenerlo sincronizado.
 ### SEO — deliberadamente no implementado
 Se pospuso por ser una demo. Para publicar hace falta:
 
-- [ ] **Dominio**: `mrxcontratistas.pe`, pendiente de registrar y apuntar.
-      Ver [Con dominio propio](#con-dominio-propio) — el orden de los pasos importa.
+- [x] **Dominio**: `mrxcontratistas.pe`, conectado y con certificado emitido.
+- [ ] **Enforce HTTPS**: pendiente de marcar en Settings → Pages. Sin eso el
+      sitio sigue accesible por `http://` y GitHub reporta el origen como http.
 - [ ] **JSON-LD `LocalBusiness`**. La mayor palanca para búsquedas locales tipo
       "excavaciones lima". Requiere del cliente: razón social, dirección o zona
       de servicio, distritos cubiertos, horario, año de fundación, rango de precios.

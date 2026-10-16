@@ -2,43 +2,30 @@
 import { defineConfig, fontProviders } from 'astro/config';
 
 /*
- * `site` y `base` se derivan solos. Así el proyecto se puede publicar en
- * cualquier repositorio sin editar nada: no hay nombres de repo ni de usuario
- * escritos a mano que puedan quedar desincronizados.
+ * El sitio vive en un dominio propio y se sirve desde la raíz, así que `site`
+ * es una constante y no hay `base`.
  *
- * Reglas, en orden de prioridad:
+ * Antes ambos se derivaban de GITHUB_REPOSITORY para poder publicar en
+ * cualquier repositorio sin editar código. Esa flexibilidad causó un fallo
+ * real en producción: el dominio propio se conectó DESPUÉS del último
+ * despliegue, así que el build que estaba servido llevaba cocido
+ * `base: "/marz-contratista-web"` y todos los assets daban 404 en
+ * mrxcontratistas.pe. Un build no debe depender del estado de un ajuste
+ * externo que puede cambiar después de haberse construido.
  *
- *   1. Dominio propio → definir la variable de entorno SITE.
- *      Sirve desde la raíz, así que no lleva `base`.
- *      Ej: SITE=https://excavacionesmartinez.pe
+ * El https:// va escrito a mano a propósito. GitHub reporta el sitio como
+ * http:// mientras "Enforce HTTPS" esté apagado en Settings > Pages, y
+ * tomar el origen de ahí metía URLs canónicas en http dentro del HTML.
  *
- *   2. GitHub Actions → GITHUB_REPOSITORY llega como "usuario/repo".
- *      - Repo llamado "usuario.github.io" (user page): raíz, sin `base`.
- *      - Cualquier otro repo (project page): base = "/repo".
- *
- *   3. Local (dev, build, preview) → raíz, sin `base`.
+ * SITE queda como escape para previews en otro dominio:
+ *   SITE=https://preview.ejemplo.pe pnpm build
  */
-const dominioPropio = process.env.SITE;
-const [propietario, repo] = (process.env.GITHUB_REPOSITORY ?? '').split('/');
-
-const esUserPage =
-  !!propietario &&
-  !!repo &&
-  repo.toLowerCase() === `${propietario.toLowerCase()}.github.io`;
-
-const site = dominioPropio
-  ? dominioPropio
-  : propietario
-    ? `https://${propietario}.github.io`
-    : 'http://localhost:4321';
-
-// undefined deja el valor por defecto de Astro, que es "/".
-const base = dominioPropio || esUserPage || !repo ? undefined : `/${repo}`;
+const site = process.env.SITE ?? 'https://mrxcontratistas.pe';
 
 // https://astro.build/config
 export default defineConfig({
   site,
-  base,
+  // Sin `base`: un dominio propio sirve desde la raíz.
 
   // Fuentes self-hosted: Astro las descarga en build y las sirve desde el
   // propio dominio, con preload y fallbacks calculados. Evita el <link>
