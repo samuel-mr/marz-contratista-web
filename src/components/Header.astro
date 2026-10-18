@@ -2,7 +2,14 @@
 import Logo from './Logo.astro';
 import Boton from './Boton.astro';
 import { empresa, telHref } from '../data/sitio';
-import { inicio } from '../lib/rutas';
+import { inicio, ruta } from '../lib/rutas';
+
+// `${inicio}#servicios` y no "#servicios": desde /obras/ el ancla sola
+// apuntaría a una sección que no existe en esa página.
+const enlaces = [
+  { href: `${inicio}#servicios`, texto: 'Servicios' },
+  { href: ruta('obras/'), texto: 'Obras' },
+];
 ---
 
 <header class="header">
@@ -10,7 +17,12 @@ import { inicio } from '../lib/rutas';
     <Logo size={26} />
     <span class="wordmark">{empresa.nombre}</span>
   </a>
-  <Boton href={telHref} variante="solid" tam="sm" evento="llamar-header">Llamar ahora</Boton>
+  <div class="derecha">
+    <nav aria-label="Principal">
+      {enlaces.map((e) => <a href={e.href}>{e.texto}</a>)}
+    </nav>
+    <Boton href={telHref} variante="solid" tam="sm" evento="llamar-header">Llamar ahora</Boton>
+  </div>
 </header>
 
 <style>
@@ -43,5 +55,42 @@ import { inicio } from '../lib/rutas';
     line-height: 1;
     color: var(--c-texto);
     text-transform: uppercase;
+  }
+
+  .derecha {
+    display: flex;
+    align-items: center;
+    gap: var(--e-16);
+  }
+
+  nav {
+    display: flex;
+    gap: var(--e-16);
+  }
+
+  /* min-height del target táctil: en móvil estos enlaces se pulsan con el
+     dedo igual que el botón de al lado. */
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target-tactil);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--c-texto);
+  }
+
+  nav a:hover {
+    color: var(--c-acento);
+  }
+
+  /* A 390px no entran marca, enlaces y botón en una fila, y un header
+     sticky de dos filas se come la pantalla. En móvil manda el botón de
+     llamar; la galería sigue enlazada desde el footer. */
+  @media (max-width: 559px) {
+    nav {
+      display: none;
+    }
   }
 </style>

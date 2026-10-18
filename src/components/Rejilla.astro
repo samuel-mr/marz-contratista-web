@@ -10,8 +10,10 @@ interface Props {
    * `auto`  → tantas columnas como quepan (auto-fit).
    * `pares` → 1, 2 o 4 columnas, nunca 3. Con 4 tarjetas, auto-fit deja una
    *           suelta en la segunda fila en el rango de tablet; esto lo evita.
+   * `tercios` → 1, 2 o 3 columnas. Para 6 tarjetas: 3+3 o 2+2+2, nunca una
+   *           fila incompleta.
    */
-  columnas?: 'auto' | 'pares';
+  columnas?: 'auto' | 'pares' | 'tercios';
 }
 const { min = '240px', columnas = 'auto' } = Astro.props;
 ---
@@ -30,13 +32,21 @@ const { min = '240px', columnas = 'auto' } = Astro.props;
     grid-template-columns: repeat(auto-fit, minmax(var(--min), 1fr));
   }
 
-  .pares {
+  .pares,
+  .tercios {
     grid-template-columns: 1fr;
   }
 
   @media (min-width: 560px) {
-    .pares {
+    .pares,
+    .tercios {
       grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .tercios {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 

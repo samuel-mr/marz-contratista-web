@@ -1,0 +1,52 @@
+---
+/*
+ * GitHub Pages sirve dist/404.html para cualquier ruta inexistente. Lleva
+ * marca y contacto para que un enlace roto no sea un cliente perdido.
+ */
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Seccion from '../components/Seccion.astro';
+import Boton from '../components/Boton.astro';
+import IconoTelefono from '../components/IconoTelefono.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFab from '../components/WhatsAppFab.astro';
+import { empresa, telHref } from '../data/sitio';
+import { inicio } from '../lib/rutas';
+---
+
+<Base titulo={`Página no encontrada | ${empresa.nombre}`} noindex>
+  <Header />
+  <main>
+    <Seccion titulo="Página no encontrada" regla="acento">
+      <p class="texto">
+        La página que buscas no existe o cambió de dirección. Vuelve al inicio
+        o llámanos y te atendemos al momento.
+      </p>
+      <div class="acciones">
+        <Boton href={inicio} variante="outline">Ir al inicio</Boton>
+        <Boton href={telHref} variante="solid" evento="llamar-404">
+          <IconoTelefono />
+          <span>{empresa.telefono}</span>
+        </Boton>
+      </div>
+    </Seccion>
+  </main>
+  <Footer />
+  <WhatsAppFab />
+</Base>
+
+<style>
+  .texto {
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 560px;
+    margin: 0 0 var(--e-20);
+    opacity: 0.75;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--e-12);
+  }
+</style>

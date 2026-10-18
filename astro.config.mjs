@@ -1,5 +1,7 @@
 // @ts-check
+import { existsSync, readdirSync } from 'node:fs';
 import { defineConfig, fontProviders } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 /*
  * El sitio vive en un dominio propio y se sirve desde la raíz, así que `site`
@@ -22,10 +24,30 @@ import { defineConfig, fontProviders } from 'astro/config';
  */
 const site = process.env.SITE ?? 'https://mrxcontratistas.pe';
 
+/*
+ * La galería vacía lleva noindex (src/pages/obras/index.astro), así que
+ * tampoco debe estar en el sitemap: Google marca como error una URL del
+ * sitemap que pide no ser indexada. Se cuenta en disco porque la config se
+ * evalúa antes que las colecciones de contenido. Una carpeta con
+ * `publicar: false` cuenta igual; el desfase es aceptable.
+ */
+const dirObras = './src/content/obras';
+const hayObras =
+  existsSync(dirObras) &&
+  readdirSync(dirObras, { withFileTypes: true }).some(
+    (d) => d.isDirectory() && existsSync(`${dirObras}/${d.name}/index.md`),
+  );
+
 // https://astro.build/config
 export default defineConfig({
   site,
   // Sin `base`: un dominio propio sirve desde la raíz.
+
+  integrations: [
+    sitemap({
+      filter: (url) => hayObras || !url.endsWith('/obras/'),
+    }),
+  ],
 
   // Fuentes self-hosted: Astro las descarga en build y las sirve desde el
   // propio dominio, con preload y fallbacks calculados. Evita el <link>

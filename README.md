@@ -64,6 +64,20 @@ hace falta tocar markup.
 | 02 | Nivelación y movimiento de tierras | Preparación y nivelación de terrenos para construcción y urbanización. | Nivelación, Movimiento de tierras, Relleno, Compactado, Afirmado |
 | 03 | Demolición | Demolición con martillo hidráulico y retiro de escombros. | Casas, Edificios, Tanques, Estructuras de concreto |
 | 04 | Eliminación de desmonte | Retiro con volquete y disposición en botadero autorizado. | Volquete, Botadero autorizado |
+| 05 | Alquiler de maquinaria | Maquinaria pesada con operador o sin operador. | Con operador, Sin operador, Por hora, Por día, Por mes |
+| 06 | Obras civiles | Ejecución de obras de concreto e infraestructura. | Cimentaciones, Muros de contención, Pistas y veredas, Obras de concreto |
+
+### Galería de obras
+
+`/obras/` y una página por obra en `/obras/<slug>/`, generadas desde la
+colección `src/content/obras/` (esquema en `src/content.config.ts`). Cómo
+añadir una obra: `src/content/obras/README.md`.
+
+Mientras no haya obras, `/obras/` lleva `noindex` y queda fuera del sitemap, y
+la home no muestra la sección "Obras recientes".
+
+Si borras una obra en local y el build falla con `ImageNotFound`, es el caché
+de contenido: `rm -rf .astro node_modules/.astro`. En CI no pasa (build limpio).
 
 ### Primitivos
 
@@ -253,7 +267,7 @@ subdirectorio (`usuario.github.io/repo/`) hay que reintroducir `base` en
 ### Contenido
 - [ ] **Testimonios**: los tres son placeholders genéricos inventados.
       Reemplazar por reales o eliminar la sección (`src/data/sitio.ts`).
-- [ ] **"+15 años"**: valor asumido, no confirmado por el cliente.
+- [x] **Experiencia**: "Equipo con +5 años de experiencia; empresa formalizada en 2026". Es la única cifra válida.
 - [ ] **Foto del hero**: `src/assets/hero-panoramica.webp` (1920×800) ya está en el
       hero, pero sigue siendo una imagen generada. Sustituir por fotografía real de
       la maquinaria de la empresa, **respetando la composición**: la disposición
@@ -269,14 +283,12 @@ subdirectorio (`usuario.github.io/repo/`) hay que reintroducir `base` en
 Se pospuso por ser una demo. Para publicar hace falta:
 
 - [x] **Dominio**: `mrxcontratistas.pe`, conectado y con certificado emitido.
-- [ ] **Enforce HTTPS**: pendiente de marcar en Settings → Pages. Sin eso el
-      sitio sigue accesible por `http://` y GitHub reporta el origen como http.
-- [ ] **JSON-LD `LocalBusiness`**. La mayor palanca para búsquedas locales tipo
-      "excavaciones lima". Requiere del cliente: razón social, dirección o zona
-      de servicio, distritos cubiertos, horario, año de fundación, rango de precios.
-- [ ] **Open Graph + Twitter Card** con imagen 1200×630. Es lo que se ve al
-      compartir el enlace por WhatsApp, el canal principal del negocio.
-- [ ] **`sitemap.xml`** (`@astrojs/sitemap`) y **`robots.txt`**.
+- [x] **Enforce HTTPS**: activo (verificado el 18-oct-2026).
+- [x] **JSON-LD `GeneralContractor`** en `src/components/DatosEstructurados.astro`.
+      Negocio de área de servicio: sin calle, solo Lima.
+- [x] **Open Graph + Twitter Card** con imagen 1200×630 generada en build desde el hero.
+- [x] **`sitemap-index.xml`** (`@astrojs/sitemap`) y **`robots.txt`**.
+- [x] **Página 404** propia (`src/pages/404.astro`).
 - [ ] **Favicon completo**: hay `favicon.png` 32px y `apple-touch-icon.png` 180px,
       ambos generados desde `src/assets/icono.png`. Falta `manifest.webmanifest`.
 - [ ] **Google Business Profile**. No es código, pero para un negocio local pesa
@@ -290,5 +302,6 @@ Se pospuso por ser una demo. Para publicar hace falta:
 ## Contacto de la empresa
 
 - Teléfono / WhatsApp: **+51 972 014 679**
-- Email: **roymartinezramirez@gmail.com**
-- Ciudad: **Lima, Perú**
+- Email: **contacto@mrxcontratistas.pe**
+- Ciudad: **Lima, Perú** (la dirección fiscal no se publica)
+- Razón social: **MRX CONTRATISTAS S.A.C.S.** · RUC **20616671147**

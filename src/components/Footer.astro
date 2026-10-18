@@ -1,12 +1,31 @@
 ---
-import { empresa, telHref } from '../data/sitio';
+import { empresa, redes, telHref } from '../data/sitio';
+import { ruta } from '../lib/rutas';
+
+/*
+ * Razón social y RUC a la vista: es lo primero que verifica una constructora
+ * o una entidad pública antes de contratar. La dirección fiscal no se publica
+ * (decisión del cliente); solo la ciudad.
+ */
 ---
 
 <footer class="footer">
-  <span>{empresa.nombre} · {empresa.ciudad}</span>
-  <div class="enlaces">
+  <div class="bloque">
+    <p class="nombre">{empresa.nombre}</p>
+    <p>{empresa.razonSocial} · RUC {empresa.ruc}</p>
+    <p>Lima · {empresa.horario}</p>
+  </div>
+  <div class="bloque enlaces">
     <a href={telHref}>{empresa.telefono}</a>
     <a href={`mailto:${empresa.email}`}>{empresa.email}</a>
+    <a href={ruta('obras/')}>Galería de obras</a>
+    {
+      redes.map((r) => (
+        <a href={r.url} target="_blank" rel="noopener me">
+          {r.nombre}
+        </a>
+      ))
+    }
   </div>
 </footer>
 
@@ -18,16 +37,35 @@ import { empresa, telHref } from '../data/sitio';
     border-top: var(--b-hairline);
     display: flex;
     flex-wrap: wrap;
-    gap: var(--e-12);
+    gap: var(--e-16);
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     font-size: 13px;
+  }
+
+  /* La opacidad va en el texto y no en todo el footer: aplicada al contenedor
+     bajaba también los enlaces rojos por debajo de AA. */
+  .bloque p {
+    margin: 0 0 var(--e-5);
     opacity: 0.6;
+  }
+
+  .bloque .nombre {
+    font-weight: 700;
+    opacity: 0.8;
   }
 
   .enlaces {
     display: flex;
-    gap: var(--e-16);
+    gap: var(--e-6) var(--e-16);
     flex-wrap: wrap;
+  }
+
+  /* El botón flotante de WhatsApp (56px a 20px del borde) tapaba los
+     enlaces del final en móvil. */
+  @media (max-width: 559px) {
+    .footer {
+      padding-bottom: 96px;
+    }
   }
 </style>

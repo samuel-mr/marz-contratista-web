@@ -1,0 +1,75 @@
+---
+/** Tarjeta de la galería. La usan /obras/ y "Obras recientes" de la home. */
+import { Image } from 'astro:assets';
+import { fechaLegible, nombreServicio, type Obra } from '../lib/obras';
+import { ruta } from '../lib/rutas';
+
+interface Props {
+  obra: Obra;
+}
+const { obra } = Astro.props;
+const { data } = obra;
+---
+
+<a class="obra" href={ruta(`obras/${obra.id}/`)}>
+  <Image
+    src={data.portada}
+    alt={data.portadaAlt}
+    widths={[400, 700]}
+    sizes="(min-width: 900px) 340px, (min-width: 560px) 50vw, 100vw"
+    class="foto"
+  />
+  <div class="texto">
+    <p class="servicio">{nombreServicio(data.servicio)}</p>
+    <h3 class="titulo">{data.titulo}</h3>
+    <p class="meta">{data.distrito} · {fechaLegible(data.fecha)}</p>
+  </div>
+</a>
+
+<style>
+  .obra {
+    display: block;
+    border: var(--b-hairline);
+    color: var(--c-texto);
+    transition: border-color 0.12s ease;
+  }
+
+  .obra:hover {
+    border-color: var(--c-acento);
+    color: var(--c-texto);
+  }
+
+  .foto {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: var(--c-superficie);
+  }
+
+  .texto {
+    padding: var(--e-14) var(--e-16) var(--e-16);
+  }
+
+  .servicio {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--c-acento);
+    margin: 0;
+  }
+
+  .titulo {
+    font-family: var(--f-cuerpo);
+    font-weight: 600;
+    font-size: 15px;
+    text-transform: none;
+    margin: var(--e-6) 0;
+  }
+
+  .meta {
+    font-size: 13px;
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>

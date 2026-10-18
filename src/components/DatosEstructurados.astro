@@ -1,0 +1,68 @@
+---
+/**
+ * JSON-LD GeneralContractor (subtipo de LocalBusiness). Le dice a Google lo
+ * mismo que el perfil de Google Business, en su formato: es la señal que
+ * conecta la web con el perfil en las búsquedas locales.
+ *
+ * Negocio de área de servicio: `address` lleva solo ciudad y país, sin calle.
+ * Google lo acepta para negocios que atienden en casa del cliente, y respeta
+ * la decisión de no publicar la dirección fiscal.
+ *
+ * Validar tras cada cambio en https://search.google.com/test/rich-results
+ */
+import { empresa, horarioSchema, redes, servicios } from '../data/sitio';
+import { ruta } from '../lib/rutas';
+
+interface Props {
+  /** URL absoluta de la imagen de Open Graph; se reutiliza como `image`. */
+  imagen: string;
+}
+const { imagen } = Astro.props;
+
+const sitio = new URL(ruta(''), Astro.site).href;
+
+const datos = {
+  '@context': 'https://schema.org',
+  '@type': 'GeneralContractor',
+  '@id': `${sitio}#empresa`,
+  name: empresa.nombre,
+  legalName: empresa.razonSocial,
+  taxID: empresa.ruc,
+  url: sitio,
+  logo: new URL(ruta('apple-touch-icon.png'), Astro.site).href,
+  image: imagen,
+  telephone: empresa.telefonoRaw,
+  email: empresa.email,
+  foundingDate: empresa.anioFundacion,
+  founder: { '@type': 'Person', name: empresa.fundador },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Lima',
+    addressRegion: 'Lima',
+    addressCountry: 'PE',
+  },
+  areaServed: { '@type': 'City', name: 'Lima' },
+  openingHoursSpecification: horarioSchema.map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.dias,
+    opens: h.abre,
+    closes: h.cierra,
+  })),
+  sameAs: redes.map((r) => r.url),
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Servicios',
+    itemListElement: servicios.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: {
+        '@type': 'Service',
+        name: s.titulo,
+        description: `${s.cuerpo} ${s.etiquetas.join(', ')}.`,
+        areaServed: 'Lima',
+      },
+    })),
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(datos)} />
