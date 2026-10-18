@@ -1,0 +1,238 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Seccion from '../../components/Seccion.astro';
+import Rejilla from '../../components/Rejilla.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppFab from '../../components/WhatsAppFab.astro';
+import { empresa } from '../../data/sitio';
+import { ruta } from '../../lib/rutas';
+import { fechaLegible, nombreServicio, obrasPublicadas, type Obra } from '../../lib/obras';
+
+export async function getStaticPaths() {
+  const obras = await obrasPublicadas();
+  return obras.map((obra) => ({ params: { slug: obra.id }, props: { obra } }));
+}
+
+interface Props {
+  obra: Obra;
+}
+const { obra } = Astro.props;
+const { data } = obra;
+const { Content } = await render(obra);
+
+const ficha = [
+  ['Servicio', nombreServicio(data.servicio)],
+  ['Distrito', data.distrito],
+  ['Fecha', fechaLegible(data.fecha)],
+  ['Volumen', data.volumen],
+  ['Duración', data.duracion],
+  ['Maquinaria', data.maquinaria],
+  ['Cliente', data.cliente],
+].filter((fila): fila is [string, string] => Boolean(fila[1]));
+
+const etapas = { antes: 'Antes', durante: 'Durante', despues: 'Después' } as const;
+---
+
+<Base
+  titulo={`${data.titulo} en ${data.distrito} | ${empresa.nombre}`}
+  descripcion={data.resumen}
+  imagen={data.portada}
+>
+  <Header />
+  <main>
+    <Seccion>
+      <a class="volver" href={ruta('obras/')}>← Galería de obras</a>
+      <h1>{data.titulo}</h1>
+      <p class="resumen">{data.resumen}</p>
+
+      <Image
+        src={data.portada}
+        alt={data.portadaAlt}
+        widths={[700, 1100]}
+        sizes="(min-width: 1140px) 1060px, 100vw"
+        loading="eager"
+        class="portada"
+      />
+
+      <div class="cuerpo">
+        <dl class="ficha">
+          {
+            ficha.map(([clave, valor]) => (
+              <div>
+                <dt>{clave}</dt>
+                <dd>{valor}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <div class="contenido">
+          <Content />
+        </div>
+      </div>
+    </Seccion>
+
+    {
+      data.fotos.length > 0 && (
+        <Seccion titulo="Fotos">
+          <Rejilla columnas="tercios">
+            {data.fotos.map((f) => (
+              <figure>
+                <Image
+                  src={f.src}
+                  alt={f.alt}
+                  widths={[400, 700]}
+                  sizes="(min-width: 900px) 340px, (min-width: 560px) 50vw, 100vw"
+                />
+                {f.etapa && <figcaption>{etapas[f.etapa]}</figcaption>}
+              </figure>
+            ))}
+          </Rejilla>
+        </Seccion>
+      )
+    }
+
+    {
+      data.videos.length > 0 && (
+        <Seccion titulo="Videos">
+          <Rejilla min="300px">
+            {data.videos.map((v) => (
+              <div class="video">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${v.youtube}`}
+                  title={v.titulo}
+                  loading="lazy"
+                  allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                />
+              </div>
+            ))}
+          </Rejilla>
+        </Seccion>
+      )
+    }
+
+    <CtaFinal />
+  </main>
+  <Footer />
+  <WhatsAppFab />
+</Base>
+
+<style>
+  .volver {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: var(--e-16);
+  }
+
+  h1 {
+    font-size: clamp(30px, 6vw, 46px);
+    line-height: 1;
+    margin: 0 0 var(--e-12);
+  }
+
+  .resumen {
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 640px;
+    opacity: 0.75;
+    margin: 0 0 var(--e-22);
+  }
+
+  .portada {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: var(--c-superficie);
+    border-top: var(--b-regla-foto) solid var(--c-acento);
+  }
+
+  .cuerpo {
+    display: grid;
+    gap: var(--e-24);
+    margin-top: var(--e-24);
+  }
+
+  @media (min-width: 900px) {
+    .cuerpo {
+      grid-template-columns: 280px 1fr;
+    }
+  }
+
+  .ficha {
+    margin: 0;
+    border: var(--b-hairline);
+    padding: var(--e-16);
+    align-self: start;
+  }
+
+  .ficha div + div {
+    margin-top: var(--e-12);
+  }
+
+  dt {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  dd {
+    margin: var(--e-5) 0 0;
+    font-size: 14px;
+  }
+
+  /* El cuerpo viene de Markdown: los H2 de la ficha van más pequeños que
+     los de sección para no competir con "Fotos" y "Videos". */
+  .contenido :global(h2) {
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    margin: var(--e-20) 0 var(--e-8);
+  }
+
+  .contenido :global(h2:first-child) {
+    margin-top: 0;
+  }
+
+  .contenido :global(p) {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 var(--e-12);
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  figure :global(img) {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    background: var(--c-superficie);
+  }
+
+  figcaption {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: var(--e-6);
+  }
+
+  .video {
+    aspect-ratio: 16 / 9;
+    background: var(--c-superficie);
+  }
+
+  .video iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>

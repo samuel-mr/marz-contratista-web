@@ -1,0 +1,37 @@
+---
+/**
+ * Las tres obras más recientes en la home. No renderiza nada mientras la
+ * galería esté vacía: una sección sin contenido resta más de lo que suma.
+ */
+import Seccion from './Seccion.astro';
+import Rejilla from './Rejilla.astro';
+import TarjetaObra from './TarjetaObra.astro';
+import { obrasPublicadas } from '../lib/obras';
+import { ruta } from '../lib/rutas';
+
+const recientes = (await obrasPublicadas()).slice(0, 3);
+---
+
+{
+  recientes.length > 0 && (
+    <Seccion titulo="Obras recientes" id="obras">
+      <Rejilla columnas="tercios">
+        {recientes.map((o) => (
+          <TarjetaObra obra={o} />
+        ))}
+      </Rejilla>
+      <a class="todas" href={ruta('obras/')}>
+        Ver todas las obras →
+      </a>
+    </Seccion>
+  )
+}
+
+<style>
+  .todas {
+    display: inline-block;
+    margin-top: var(--e-20);
+    font-size: 14px;
+    font-weight: 600;
+  }
+</style>

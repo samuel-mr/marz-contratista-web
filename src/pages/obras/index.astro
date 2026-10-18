@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Seccion from '../../components/Seccion.astro';
+import Rejilla from '../../components/Rejilla.astro';
+import TarjetaObra from '../../components/TarjetaObra.astro';
+import Boton from '../../components/Boton.astro';
+import IconoWhatsApp from '../../components/IconoWhatsApp.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import Footer from '../../components/Footer.astro';
+import WhatsAppFab from '../../components/WhatsAppFab.astro';
+import { waHref } from '../../data/sitio';
+import { obrasPublicadas } from '../../lib/obras';
+
+const obras = await obrasPublicadas();
+---
+
+<!-- Vacía, la galería no aporta nada a Google: noindex hasta la primera obra.
+     El sitemap la excluye por la misma razón (ver astro.config.mjs). -->
+<Base
+  titulo="Galería de obras | MRX CONTRATISTAS"
+  descripcion="Obras de excavación, movimiento de tierras, demolición y obras civiles realizadas por MRX CONTRATISTAS en Lima."
+  noindex={obras.length === 0}
+>
+  <Header />
+  <main>
+    <Seccion titulo="Galería de obras" regla="acento">
+      {
+        obras.length > 0 ? (
+          <Rejilla columnas="tercios">
+            {obras.map((o) => (
+              <TarjetaObra obra={o} />
+            ))}
+          </Rejilla>
+        ) : (
+          <div class="vacia">
+            <p>
+              Estamos preparando la galería con fotos y videos de nuestras
+              obras. Mientras tanto, pídenos referencias de trabajos similares
+              al tuyo.
+            </p>
+            <Boton href={waHref} variante="outline" externo evento="whatsapp-galeria-vacia">
+              <IconoWhatsApp size={18} />
+              <span>Pedir referencias por WhatsApp</span>
+            </Boton>
+          </div>
+        )
+      }
+    </Seccion>
+    <CtaFinal />
+  </main>
+  <Footer />
+  <WhatsAppFab />
+</Base>
+
+<style>
+  .vacia p {
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 560px;
+    margin: 0 0 var(--e-20);
+    opacity: 0.75;
+  }
+</style>
