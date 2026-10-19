@@ -1,8 +1,8 @@
 ---
 /*
- * Umami self-hosted. Inerte mientras no existan las variables de entorno,
- * así que el sitio funciona sin analítica y no hay que tocar código para
- * activarla: basta con crear .env a partir de .env.example.
+ * Umami Cloud. Inerte mientras no existan las variables de entorno, así
+ * que el sitio funciona sin analítica. En producción las pasa el workflow
+ * de despliegue desde las variables del repositorio; en local, .env.
  *
  * Los clics se rastrean con el atributo data-umami-event, que el propio
  * tracker de Umami intercepta. No hace falta JS propio.

@@ -181,12 +181,13 @@ suministro.
 
 ## Analítica
 
-Umami self-hosted. Inerte mientras no existan las variables de entorno, así que
-el sitio compila y funciona sin ella.
+Umami Cloud. Inerte mientras no existan las variables de entorno, así que el
+sitio compila y funciona sin ella.
 
-```bash
-cp .env.example .env   # y rellenar
-```
+- **Producción:** `PUBLIC_UMAMI_SRC` y `PUBLIC_UMAMI_ID` son variables del
+  repositorio (Settings > Secrets and variables > Actions > Variables) y el
+  workflow las pasa al build.
+- **Local:** `cp .env.example .env` y rellenar.
 
 Los CTAs ya llevan `data-umami-event`: `llamar-header`, `llamar-hero`,
 `whatsapp-hero`, `llamar-cta-final`, `whatsapp-cta-final`, `whatsapp-flotante`.
@@ -295,9 +296,8 @@ Se pospuso por ser una demo. Para publicar hace falta:
       más que todo lo anterior junto.
 
 ### Analítica
-- [ ] Levantar el servidor de Umami y rellenar `.env`.
-- [ ] Verificar que `data-umami-event` es el mecanismo correcto en la versión de
-      Umami que se instale.
+- [x] Umami Cloud activo (variables del repositorio).
+- [ ] Confirmar en el panel de Umami que llegan los eventos `data-umami-event`.
 
 ## Contacto de la empresa
 
