@@ -73,6 +73,11 @@ jobs:
       - name: Build with Astro
         run: pnpm build
         working-directory: ${{ env.BUILD_PATH }}
+        # Umami: se definen en Settings > Secrets and variables > Actions >
+        # Variables. Si faltan, el build sigue y el sitio queda sin analítica.
+        env:
+          PUBLIC_UMAMI_SRC: ${{ vars.PUBLIC_UMAMI_SRC }}
+          PUBLIC_UMAMI_ID: ${{ vars.PUBLIC_UMAMI_ID }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

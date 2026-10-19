@@ -36,7 +36,7 @@ export const horarioSchema = [
 /** Solo perfiles ya públicos. Google Business se añade cuando sea visible. */
 export const redes = [
   { nombre: 'Facebook', url: 'https://www.facebook.com/profile.php?id=61595412065004' },
-  { nombre: 'LinkedIn', url: 'https://www.linkedin.com/in/mrx-contratistas' },
+  { nombre: 'LinkedIn', url: 'https://www.linkedin.com/company/mrx-contratistas' },
 ] as const;
 
 export const telHref = `tel:${empresa.telefonoRaw}`;
