@@ -65,7 +65,7 @@ hace falta tocar markup.
 | 03 | Demolición | Demolición con martillo hidráulico y retiro de escombros. | Casas, Edificios, Tanques, Estructuras de concreto |
 | 04 | Obras de protección y contención | Control de cauces y contención de taludes en quebradas y laderas. | Diques de contención, Muros de contención, Muros de encauzamiento, Limpieza de cauces |
 | 05 | Eliminación de desmonte y transporte de materiales | Retiro y transporte con volquete, con disposición en botadero autorizado. | Volquete, Botadero autorizado, Transporte de materiales |
-| 06 | Alquiler de maquinaria pesada | Maquinaria pesada con operador o sin operador. | Con operador, Sin operador, Por hora, Por día, Por mes |
+| 06 | Alquiler de maquinaria pesada | Maquinaria pesada siempre con operador calificado. | Con operador, Sin operador, Por hora, Por día, Por mes |
 | 07 | Obras civiles | Ejecución de obras de concreto e infraestructura. | Cimentaciones, Pistas y veredas, Obras de concreto |
 
 ### Galería de obras

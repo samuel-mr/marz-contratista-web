@@ -116,8 +116,8 @@ export const servicios: Servicio[] = [
     id: 'alquiler-maquinaria',
     numero: '06',
     titulo: 'Alquiler de maquinaria pesada',
-    cuerpo: 'Maquinaria pesada con operador o sin operador.',
-    etiquetas: ['Con operador', 'Sin operador', 'Por hora', 'Por día', 'Por mes'],
+    cuerpo: 'Maquinaria pesada siempre con operador calificado.',
+    etiquetas: ['Con operador', 'Por hora', 'Por día', 'Por mes'],
   },
   {
     id: 'obras-civiles',
