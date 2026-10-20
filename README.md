@@ -61,11 +61,12 @@ hace falta tocar markup.
 | # | Servicio | Descripción | Tipos de obra |
 |---|---|---|---|
 | 01 | Excavación | Excavación en roca y tierra para cimentaciones y obras civiles. | Cisternas, Zapatas, Zanjas, Calzaduras, Sótanos |
-| 02 | Nivelación y movimiento de tierras | Preparación y nivelación de terrenos para construcción y urbanización. | Nivelación, Movimiento de tierras, Relleno, Compactado, Afirmado |
+| 02 | Nivelación y movimiento de tierras | Preparación y nivelación de terrenos para construcción y urbanización. | Nivelación, Movimiento de tierras, Relleno, Compactado, Afirmado, Habilitaciones urbanas |
 | 03 | Demolición | Demolición con martillo hidráulico y retiro de escombros. | Casas, Edificios, Tanques, Estructuras de concreto |
-| 04 | Eliminación de desmonte | Retiro con volquete y disposición en botadero autorizado. | Volquete, Botadero autorizado |
-| 05 | Alquiler de maquinaria | Maquinaria pesada con operador o sin operador. | Con operador, Sin operador, Por hora, Por día, Por mes |
-| 06 | Obras civiles | Ejecución de obras de concreto e infraestructura. | Cimentaciones, Muros de contención, Pistas y veredas, Obras de concreto |
+| 04 | Obras de protección y contención | Control de cauces y contención de taludes en quebradas y laderas. | Diques de contención, Muros de contención, Muros de encauzamiento, Limpieza de cauces |
+| 05 | Eliminación de desmonte y transporte de materiales | Retiro y transporte con volquete, con disposición en botadero autorizado. | Volquete, Botadero autorizado, Transporte de materiales |
+| 06 | Alquiler de maquinaria pesada | Maquinaria pesada con operador o sin operador. | Con operador, Sin operador, Por hora, Por día, Por mes |
+| 07 | Obras civiles | Ejecución de obras de concreto e infraestructura. | Cimentaciones, Pistas y veredas, Obras de concreto |
 
 ### Galería de obras
 

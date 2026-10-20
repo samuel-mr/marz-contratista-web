@@ -48,7 +48,7 @@ export const waHref = `https://wa.me/${empresa.whatsapp}?text=${encodeURICompone
 export const seo = {
   titulo: 'MRX CONTRATISTAS | Movimiento de tierras en Lima',
   descripcion:
-    'Excavación, movimiento de tierras, demolición, obras civiles y alquiler de maquinaria en Lima. Cotiza por llamada o WhatsApp.',
+    'Excavación, movimiento de tierras, demolición, obras de protección y contención y alquiler de maquinaria en Lima. Cotiza por llamada o WhatsApp.',
 } as const;
 
 export interface Servicio {
@@ -83,6 +83,7 @@ export const servicios: Servicio[] = [
       'Relleno',
       'Compactado',
       'Afirmado',
+      'Habilitaciones urbanas',
     ],
   },
   {
@@ -93,27 +94,38 @@ export const servicios: Servicio[] = [
     etiquetas: ['Casas', 'Edificios', 'Tanques', 'Estructuras de concreto'],
   },
   {
-    id: 'eliminacion-desmonte',
+    id: 'proteccion-contencion',
     numero: '04',
-    titulo: 'Eliminación de desmonte',
-    cuerpo: 'Retiro con volquete y disposición en botadero autorizado.',
-    etiquetas: ['Volquete', 'Botadero autorizado'],
+    titulo: 'Obras de protección y contención',
+    cuerpo: 'Control de cauces y contención de taludes en quebradas y laderas.',
+    etiquetas: [
+      'Diques de contención',
+      'Muros de contención',
+      'Muros de encauzamiento',
+      'Limpieza de cauces',
+    ],
+  },
+  {
+    id: 'eliminacion-desmonte',
+    numero: '05',
+    titulo: 'Eliminación de desmonte y transporte de materiales',
+    cuerpo: 'Retiro y transporte con volquete, con disposición en botadero autorizado.',
+    etiquetas: ['Volquete', 'Botadero autorizado', 'Transporte de materiales'],
   },
   {
     id: 'alquiler-maquinaria',
-    numero: '05',
-    titulo: 'Alquiler de maquinaria',
+    numero: '06',
+    titulo: 'Alquiler de maquinaria pesada',
     cuerpo: 'Maquinaria pesada con operador o sin operador.',
     etiquetas: ['Con operador', 'Sin operador', 'Por hora', 'Por día', 'Por mes'],
   },
   {
     id: 'obras-civiles',
-    numero: '06',
+    numero: '07',
     titulo: 'Obras civiles',
     cuerpo: 'Ejecución de obras de concreto e infraestructura.',
     etiquetas: [
       'Cimentaciones',
-      'Muros de contención',
       'Pistas y veredas',
       'Obras de concreto',
     ],

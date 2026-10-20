@@ -23,7 +23,7 @@ src/content/obras/2025-08-surco-excavacion-sotano/
 titulo: Excavación de sótano para edificio multifamiliar
 fecha: 2025-08
 distrito: Santiago de Surco
-servicio: excavacion   # excavacion | movimiento-tierras | demolicion | eliminacion-desmonte | alquiler-maquinaria | obras-civiles
+servicio: excavacion   # excavacion | movimiento-tierras | demolicion | proteccion-contencion | eliminacion-desmonte | alquiler-maquinaria | obras-civiles
 resumen: Excavación de 1,200 m³ para dos sótanos, con eliminación de desmonte en botadero autorizado.
 volumen: 1,200 m³
 duracion: 12 días
