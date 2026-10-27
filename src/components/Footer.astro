@@ -43,16 +43,16 @@ import { ruta } from '../lib/rutas';
     font-size: 13px;
   }
 
-  /* La opacidad va en el texto y no en todo el footer: aplicada al contenedor
-     bajaba también los enlaces rojos por debajo de AA. */
+  /* Color y no opacidad: la opacidad bajaba el texto a 4.5:1 y, aplicada al
+     contenedor, también los enlaces rojos por debajo de AA. */
   .bloque p {
     margin: 0 0 var(--e-5);
-    opacity: 0.6;
+    color: var(--c-texto-suave);
   }
 
   .bloque .nombre {
     font-weight: 700;
-    opacity: 0.8;
+    color: var(--c-texto);
   }
 
   .enlaces {

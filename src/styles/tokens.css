@@ -20,6 +20,7 @@
      Un gris puro al lado del rojo se ve azulado. */
   --c-bg: #faf9f7;
   --c-texto: #1b1917;
+  --c-texto-suave: #5c554e; /* ink-muted del Design System: secundario, 7:1 */
   --c-acento: #af272f;
   --c-acento-hover: #8e1f26;
   --c-superficie: #f0ede8;

@@ -116,6 +116,7 @@ Definidos en `src/styles/tokens.css`. Cambiar un valor ahí lo propaga a todo el
 |---|---|---|
 | `--c-bg` | `#faf9f7` | Fondo global |
 | `--c-texto` | `#1b1917` | Texto sobre el fondo claro |
+| `--c-texto-suave` | `#5c554e` | Texto secundario (`ink-muted`, 7:1). Nunca opacidad: baja el contraste según el fondo |
 | `--c-acento` | `#AF272F` | Rojo MRX: CTAs, números, reglas, banda final |
 | `--c-acento-hover` | `#8E1F26` | Hover del botón sólido y de los enlaces |
 | `--c-superficie` | `#f0ede8` | Fondo de reserva de imagen |
