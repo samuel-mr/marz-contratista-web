@@ -38,7 +38,7 @@ Requisitos:
 ```
 src/
   assets/hero-panoramica.webp  foto del hero (1920×800, 2.4:1)
-  assets/icono.png        isotipo oficial; define el rojo de marca
+  assets/marca/           firma e isotipo en SVG (copias de branding, en currentColor)
   components/             primitivos reutilizables + secciones
   data/sitio.ts           TODO el contenido y los datos de contacto
   layouts/Base.astro      <head>, fuentes, analítica
@@ -47,7 +47,7 @@ src/
   styles/tokens.css       design tokens + reset
 public/
   .nojekyll               obligatorio: GH Pages ignora /_astro/ sin él
-  favicon.svg
+  favicon.svg, favicon.png, apple-touch-icon.png   copias de branding
 ```
 
 ### Editar contenido
@@ -88,13 +88,23 @@ de contenido: `rm -rf .astro node_modules/.astro`. En CI no pasa (build limpio).
 | `Seccion` | Contenedor con ancho máximo, padding y H2 con regla. |
 | `Tarjeta` | Caja hairline. La usan Servicios y Testimonios. |
 | `Rejilla` | Grid `auto-fit`. Colapsa a una columna sin media queries. |
-| `Logo` | Isotipo oficial en PNG (`src/assets/icono.png`). Color fijo: no sirve sobre la banda roja. |
+| `Logo` | Firma (isotipo + logotipo) o isotipo solo, en SVG `currentColor`: el color lo pone el contenedor. Respeta los tamaños mínimos del Design System (firma 56px de alto, isotipo 45px). |
 
 ### Rutas
 
 Cualquier ruta absoluta escrita a mano debe pasar por `src/lib/rutas.ts`.
 Un `href="/algo"` literal se rompe al desplegar bajo un `base`
 (`https://usuario.github.io/repo/`).
+
+## Marca
+
+Los archivos maestros de marca (logotipo, isotipo, favicons, fotos aprobadas) viven
+fuera del repo, en una única ubicación:
+
+`/Users/samuelmartinez/Library/CloudStorage/GoogleDrive-contacto@mrxcontratistas.pe/My Drive/public/branding/`
+
+Lo que hay en `src/assets/` y `public/` son copias para el build; si cambian, se
+regeneran desde ahí.
 
 ## Design tokens
 
@@ -106,28 +116,27 @@ Definidos en `src/styles/tokens.css`. Cambiar un valor ahí lo propaga a todo el
 |---|---|---|
 | `--c-bg` | `#faf9f7` | Fondo global |
 | `--c-texto` | `#1b1917` | Texto sobre el fondo claro |
-| `--c-acento` | `#BC2425` | Rojo MRX: CTAs, números, reglas, banda final |
-| `--c-acento-hover` | `#9c1f20` | Hover del botón sólido y de los enlaces |
+| `--c-acento` | `#AF272F` | Rojo MRX: CTAs, números, reglas, banda final |
+| `--c-acento-hover` | `#8E1F26` | Hover del botón sólido y de los enlaces |
 | `--c-superficie` | `#f0ede8` | Fondo de reserva de imagen |
 | `--c-borde` | `#d9d3cb` | Bordes hairline |
 | `--c-borde-hover` | `#e9e4dd` | Hover del botón claro sobre la banda roja |
 | `--c-whatsapp` | `#25D366` | Solo el botón flotante (color de marca externo) |
 
-**El rojo sale del isotipo, no al revés.** `#BC2425` es el color exacto de
-`src/assets/icono.png`, que es un PNG de paleta indexada. `brand/full-brand.jpg`
-muestrea ~`#AE272D`, pero es JPEG: eso es deriva de compresión, no otro color.
-Si cambia el isotipo, el token va detrás.
+**El rojo sale del Design System, no al revés.** `--c-acento` es `brand-red`
+(Pantone 1805, `#AF272F`) y `--c-acento-hover` es `brand-red-strong`. Si cambian
+allí, el token va detrás.
 
 **El acento hace un solo trabajo a la vez.** Sobre el fondo claro es texto y filete
-(5.8:1, AA); como relleno lleva siempre `--c-bg` encima (5.8:1, AA). Lo que no
-existe es texto oscuro sobre rojo: da 2.0:1 y falla WCAG. Por eso los botones
+(6.3:1, AA); como relleno lleva siempre `--c-bg` encima (6.3:1, AA). Lo que no
+existe es texto oscuro sobre rojo: da 2.6:1 y falla WCAG. Por eso los botones
 `solid` y la banda final usan `--c-bg` como color de texto y no un gris oscuro, y
 por eso la variante de botón que va sobre la banda se llama `inverso` y no `dark`.
 
 Los neutros llevan sesgo cálido a propósito. Un gris puro al lado del rojo se
 lee azulado, y además emparenta mal con el polvo de las fotos de obra.
 
-**Tipografía** — `Bebas Neue` (400) para titulares, `Work Sans` (400–700) para cuerpo.
+**Tipografía** — la del Design System: `Barlow Condensed` (700) para titulares, `Barlow` (400–700) para cuerpo.
 Todos los titulares van en uppercase.
 
 **Otros** — `border-radius: 0` en todo excepto el botón flotante de WhatsApp (50%).
@@ -275,11 +284,8 @@ subdirectorio (`usuario.github.io/repo/`) hay que reintroducir `base` en
       la maquinaria de la empresa, **respetando la composición**: la disposición
       superpuesta de escritorio da por hecho que el sujeto está a la derecha y la
       mitad izquierda es fondo. Una foto con la máquina centrada rompe el velo.
-- [ ] **Logo en vector**: `src/assets/icono.png` es el isotipo oficial y la fuente
-      del rojo de marca, pero es un PNG de 415×387 y color fijo. Hace falta un SVG
-      para dos cosas que hoy no se pueden: usarlo sobre la banda roja (necesita
-      versión clara) y cualquier pieza impresa. El logotipo completo de referencia
-      está en `brand/full-brand.jpg`, fuera del build.
+- [x] **Logo en vector**: la cabecera usa la firma en SVG (isotipo en móvil).
+- [x] **Tipografía**: Barlow Condensed y Barlow, como manda el Design System.
 
 ### SEO — deliberadamente no implementado
 Se pospuso por ser una demo. Para publicar hace falta:
@@ -291,8 +297,8 @@ Se pospuso por ser una demo. Para publicar hace falta:
 - [x] **Open Graph + Twitter Card** con imagen 1200×630 generada en build desde el hero.
 - [x] **`sitemap-index.xml`** (`@astrojs/sitemap`) y **`robots.txt`**.
 - [x] **Página 404** propia (`src/pages/404.astro`).
-- [ ] **Favicon completo**: hay `favicon.png` 32px y `apple-touch-icon.png` 180px,
-      ambos generados desde `src/assets/icono.png`. Falta `manifest.webmanifest`.
+- [ ] **Favicon completo**: hay `favicon.svg`, `favicon.png` 32px y
+      `apple-touch-icon.png` 180px, copias de branding. Falta `manifest.webmanifest`.
 - [ ] **Google Business Profile**. No es código, pero para un negocio local pesa
       más que todo lo anterior junto.
 

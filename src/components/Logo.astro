@@ -1,41 +1,33 @@
 ---
 /**
- * Marca de MRX CONTRATISTAS — el brazo y el cucharón del isotipo oficial.
+ * Marca de MRX CONTRATISTAS: la firma (isotipo + logotipo) o el isotipo solo.
  *
- * Este archivo define el rojo de la marca: su #BC2425 es de donde sale
- * --c-acento, no al revés. Si alguna vez cambia el isotipo, el token va detrás.
+ * Los SVG de src/assets/marca/ son copias para el build de los maestros de
+ * branding (ver "Marca" en el README): firma-horizontal sale de
+ * mrx-firma-horizontal-rojo y isotipo de mrx-isotipo-color. En la copia el
+ * relleno es `currentColor`, así que el color lo pone quien usa el componente
+ * (--c-acento sobre fondo claro, --c-bg sobre la banda roja).
  *
- * Es el PNG que entregó el cliente, sin vectorizar. Eso tiene dos
- * consecuencias que conviene recordar antes de reutilizarlo:
- *   1. Es de color fijo, no hereda `currentColor`. No sirve sobre la banda
- *      roja, donde haría falta una versión clara.
- *   2. El original mide 415×387, así que por encima de ~200px de alto se
- *      empieza a notar. Para vallas, polos o cualquier pieza impresa hace
- *      falta un SVG.
+ * Tamaños mínimos del Design System: la firma no baja de 56px de alto (por
+ * debajo "CONTRATISTAS" deja de leerse) y el isotipo no baja de 45px de alto
+ * (64px de ancho; por debajo se cierran los huecos de las orugas).
  *
- * `size` es el ALTO en px; el ancho sale de la proporción del archivo.
+ * `alto` es el ALTO en px; el ancho sale de la proporción del dibujo.
  */
-import { Image } from 'astro:assets';
-import icono from '../assets/icono.png';
+import Firma from '../assets/marca/firma-horizontal.svg';
+import Isotipo from '../assets/marca/isotipo.svg';
 
 interface Props {
-  /** Alto en px. El header usa 26. */
-  size?: number;
+  variante?: 'firma' | 'isotipo';
+  alto?: number;
   class?: string;
 }
-const { size = 26, class: clase } = Astro.props;
+const { variante = 'firma', alto = 56, class: clase } = Astro.props;
 
-const alto = size;
-const ancho = Math.round((icono.width / icono.height) * size);
+// Proporción del viewBox de cada SVG.
+const Dibujo = variante === 'firma' ? Firma : Isotipo;
+const proporcion = variante === 'firma' ? 487.99 / 103.92 : 545.83 / 380.67;
+const ancho = Math.round(proporcion * alto);
 ---
 
-<Image
-  src={icono}
-  alt=""
-  width={ancho}
-  height={alto}
-  densities={[1, 2, 3]}
-  loading="eager"
-  class={clase}
-  aria-hidden="true"
-/>
+<Dibujo width={ancho} height={alto} class={clase} aria-hidden="true" focusable="false" />

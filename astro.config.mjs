@@ -55,15 +55,15 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.google(),
-      name: 'Bebas Neue',
+      name: 'Barlow Condensed',
       cssVariable: '--fuente-titulo',
-      weights: [400],
+      weights: [700],
       styles: ['normal'],
       subsets: ['latin'],
     },
     {
       provider: fontProviders.google(),
-      name: 'Work Sans',
+      name: 'Barlow',
       cssVariable: '--fuente-cuerpo',
       weights: [400, 500, 600, 700],
       styles: ['normal'],
